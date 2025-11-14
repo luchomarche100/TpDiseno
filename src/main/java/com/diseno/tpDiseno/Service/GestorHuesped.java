@@ -36,9 +36,9 @@ public class GestorHuesped {
         }
 
         TipoDocumentoEnum tipoDoc = TipoDocumentoEnum.valueOf(request.getTipoDocumento());
-        boolean existeHuesped = huespedDAO
-                .findByTipoDocumentoAndNroDocumento(tipoDoc, request.getNroDocumento())
-                .isPresent();
+        Huesped huespedExistente = huespedDAO
+                .findFirstByTipoDocumentoAndNroDocumento(tipoDoc, request.getNroDocumento());
+        boolean existeHuesped = huespedExistente != null;
         boolean forzar=false;
         if (request.getTipoYDniRepetido() != null && request.getTipoYDniRepetido()) {
             forzar = true;
@@ -82,8 +82,10 @@ public class GestorHuesped {
         response.setMensaje("Huésped dado de alta exitosamente");
 
         return response;
+        //fin de logica CU:09 Dar de alta Huesped
     }
 
+//Funciones auxiliares
     //Esto sirve para obtener la entidad Direccion a partir del request
     private Direccion mapearDireccion(DireccionRequest direccionRequest) {
         Direccion direccion = new Direccion();
