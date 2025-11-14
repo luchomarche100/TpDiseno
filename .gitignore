@@ -8,6 +8,13 @@ target/
 # Ignorar archivo de configuración de Spring Boot
 src/main/resources/application.properties
 
+# Vaadin (no usado)
+**/generated/
+**/frontend/generated/
+package-lock.json
+pnpm-lock.yaml
+webpack.generated.js
+
 ### STS ###
 .apt_generated
 .classpath
