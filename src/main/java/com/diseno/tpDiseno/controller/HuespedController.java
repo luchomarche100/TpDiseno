@@ -1,6 +1,7 @@
 package com.diseno.tpDiseno.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,7 +12,8 @@ import com.diseno.tpDiseno.dto.request.DarAltaRequest;
 import com.diseno.tpDiseno.dto.response.DarAltaResponse;
 
 @RestController
-@RequestMapping("/huesped")
+@RequestMapping("/api/huespedes")
+@CrossOrigin(origins = "*")
 public class HuespedController {
     private final GestorHuesped gestorHuesped;
     
@@ -19,10 +21,9 @@ public class HuespedController {
         this.gestorHuesped = gestorHuesped;
     }
     
-    @PostMapping("/darAlta")
+    @PostMapping
     public ResponseEntity<DarAltaResponse> darAltaHuesped(@RequestBody DarAltaRequest request) {
         DarAltaResponse response = gestorHuesped.darAltaHuesped(request);
         return ResponseEntity.ok(response);
     }
 }
-    

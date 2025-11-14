@@ -119,7 +119,8 @@ public class ValidarHuesped {
         }
     }
     
-    // Método auxiliar para crear ErrorCampo
+    // aca se crean errores para la lista
+
     private ErrorCampo crearError(String campo, String mensaje) {
         ErrorCampo error = new ErrorCampo();
         error.setCampo(campo);
