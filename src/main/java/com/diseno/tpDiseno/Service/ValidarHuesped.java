@@ -38,9 +38,7 @@ public class ValidarHuesped {
             errores.add(crearError("tipoDocumento", "El tipo de documento no puede estar vacío."));
         }
 
-        if (!esDniValido(req.getNroDocumento())) {
-            errores.add(crearError("nroDocumento", "El DNI debe tener 7 u 8 dígitos numéricos."));
-        }
+        esDniValido(req.getNroDocumento(), req.getTipoDocumento(), errores);
 
         // Email es opcional, solo valida formato si está presente
         if (req.getEmail() != null && !req.getEmail().trim().isEmpty() && !esEmailValido(req.getEmail())) {
@@ -119,8 +117,7 @@ public class ValidarHuesped {
         }
     }
     
-    // aca se crean errores para la lista
-
+    // Método auxiliar para crear ErrorCampo
     private ErrorCampo crearError(String campo, String mensaje) {
         ErrorCampo error = new ErrorCampo();
         error.setCampo(campo);
@@ -146,8 +143,20 @@ public class ValidarHuesped {
         return esTextoNoVacio(tipoDoc);
     }
 
-    private boolean esDniValido(String dni) {
-        return dni != null && dni.matches("\\d{7,8}");
+    private void esDniValido(String dni, String tipoDoc, List<ErrorCampo> errores) {
+        if(dni == null || dni.trim().isEmpty()) {
+            errores.add(crearError("nroDocumento", "El número de documento no puede estar vacío."));
+            return;
+        }else if (tipoDoc.equalsIgnoreCase("DNI")) {
+            if (!dni.matches("\\d{7,8}")) {
+                errores.add(crearError("nroDocumento", "El DNI debe tener 7 u 8 dígitos numéricos."));
+            }
+        } else if (tipoDoc.equalsIgnoreCase("Pasaporte")) {
+            if (!dni.matches("[a-zA-Z0-9]{5,15}")) {
+                errores.add(crearError("nroDocumento", "El pasaporte debe tener entre 5 y 15 caracteres alfanuméricos."));
+            }
+        }
+        return;
     }
 
     private boolean esEmailValido(String email) {
