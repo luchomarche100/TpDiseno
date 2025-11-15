@@ -8,6 +8,9 @@ target/
 # Ignorar archivo de configuración de Spring Boot
 src/main/resources/application.properties
 
+# Ignorar directorio generado por Vaadin (si se regenera)
+frontend/generated/
+
 ### STS ###
 .apt_generated
 .classpath
