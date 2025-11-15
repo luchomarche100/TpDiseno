@@ -1,0 +1,16 @@
+spring.application.name=tpDiseno
+
+# ========= SERVIDOR =========
+server.port=8080
+
+# ========= BASE DE DATOS POSTGRES =========
+spring.datasource.url=jdbc:postgresql://localhost:5432/disenodb
+spring.datasource.username=TU_USUARIO
+spring.datasource.password=TU_CONTRASEÑA
+
+# OPCIONAL: podés ponerlo o no, pero si lo ponés que sea ESTE
+# spring.datasource.driver-class-name=org.postgresql.Driver
+
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
