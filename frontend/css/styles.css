@@ -1,0 +1,234 @@
+/* ====== Layout general ====== */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    min-height: 100vh;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: linear-gradient(180deg, #5878c2 0%, #202633 60%, #171923 100%);
+    color: #f9fafb;
+}
+
+/* Barra superior */
+
+h1 {
+    background: linear-gradient(90deg, #4b6cb7, #182848);
+    padding: 14px 32px;
+    font-size: 24px;
+    font-weight: 700;
+    color: #ffffff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+/* Tarjeta del formulario */
+
+#huespedForm {
+    max-width: 950px;
+    margin: 24px auto 20px auto;
+    padding: 22px 30px 26px 30px;
+    background: radial-gradient(circle at top, #3b4258 0%, #252a3a 40%, #1a1f2b 100%);
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    position: relative;
+}
+
+/* Título interno */
+
+#huespedForm::before {
+    content: "DATOS DEL HUÉSPED";
+    position: absolute;
+    top: 10px;
+    left: 30px;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #cbd5f5;
+}
+
+/* oculto los <br> para manejar todo con márgenes */
+#huespedForm br {
+    display: none;
+}
+
+/* ====== Labels e inputs ====== */
+
+#huespedForm label {
+    display: block;
+    margin-top: 8px;
+    margin-bottom: 1px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #e5e7eb;
+}
+
+/* campos normales: 45% del ancho */
+#huespedForm input,
+#huespedForm select {
+    width: 45%;
+    padding: 6px 8px;
+    border-radius: 4px;
+    border: 1px solid #9ca3af;
+    background-color: #ffffff;
+    color: #111827;
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+#huespedForm input::placeholder {
+    color: #9ca3af;
+}
+
+#huespedForm input:focus,
+#huespedForm select:focus {
+    border-color: #7c3aed;
+    box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.4);
+}
+
+/* Dirección */
+
+label[for="direccion"] {
+    margin-top: 10px;
+}
+
+/* 3 columnas para dirección, incluida Localidad */
+#calle,
+#numero,
+#piso {
+    display: inline-block;
+    width: calc(33.333% - 12px);
+    margin-right: 18px;
+    margin-top: 4px;
+}
+
+#nroDepartamento,
+#codigoPostal,
+#localidad {
+    display: inline-block;
+    width: calc(33.333% - 12px);
+    margin-right: 18px;
+    margin-top: 4px;
+}
+
+#provincia,
+#pais {
+    display: inline-block;
+    width: calc(33.333% - 12px);
+    margin-right: 18px;
+    margin-top: 4px;
+}
+
+/* últimos de cada fila sin margen derecho extra */
+#piso,
+#localidad,
+#pais {
+    margin-right: 0;
+}
+
+/* un poquito menos de espacio vertical */
+#piso,
+#nroDepartamento,
+#pais,
+#provincia,
+#localidad {
+    margin-bottom: 2px;
+}
+
+/* Nacionalidad: reducimos el “hueco” y la hacemos un poco más ancha */
+
+label[for="nacionalidad"] {
+    margin-top: 6px;
+}
+
+#nacionalidad {
+    width: 60%;          /* más ancho para que no se vea tanto vacío a la derecha */
+    margin-top: 0;
+}
+
+/* ====== Botones ====== */
+
+.form-buttons {
+    margin-top: 14px;            /* poco espacio con Nacionalidad */
+    display: flex;
+    justify-content: center;     /* centrados bajo todo el formulario */
+    gap: 20px;
+}
+
+.form-buttons button {
+    min-width: 150px;
+    padding: 8px 18px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.1s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+}
+
+/* Cancelar rojo, a la derecha por el orden que pusiste (si querés al revés, cambiá el orden en el HTML) */
+
+#cancelar {
+    background-color: #ef4444;
+    color: #ffffff;
+}
+
+#cancelar:hover {
+    opacity: 0.9;
+    box-shadow: 0 3px 8px rgba(239, 68, 68, 0.5);
+    transform: translateY(-1px);
+}
+
+.form-buttons button[type="submit"] {
+    background: linear-gradient(90deg, #a855f7, #7c3aed);
+    color: #ffffff;
+}
+
+.form-buttons button[type="submit"]:hover {
+    opacity: 0.95;
+    box-shadow: 0 3px 10px rgba(124, 58, 237, 0.6);
+    transform: translateY(-1px);
+}
+
+/* ====== Responsivo ====== */
+
+@media (max-width: 768px) {
+    #huespedForm {
+        margin: 16px;
+        padding: 18px 14px 20px 14px;
+    }
+
+    #huespedForm::before {
+        left: 14px;
+    }
+
+    #huespedForm input,
+    #huespedForm select,
+    #nacionalidad {
+        width: 100%;
+    }
+
+    #calle,
+    #numero,
+    #codigoPostal,
+    #piso,
+    #nroDepartamento,
+    #pais,
+    #provincia,
+    #localidad {
+        width: 100%;
+        margin-right: 0;
+    }
+
+    .form-buttons {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .form-buttons button {
+        width: 100%;
+    }
+}
