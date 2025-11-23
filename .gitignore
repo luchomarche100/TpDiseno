@@ -6,7 +6,7 @@ target/
 !**/src/test/**/target/
 
 # Ignorar archivo de configuración de Spring Boot
-src/main/resources/application.properties
+TPDISENO/src/main/resources/application.properties
 
 # Vaadin (no usado)
 **/generated/
