@@ -8,6 +8,7 @@ public class ViewController {
 
     @GetMapping("/")
     public String index() {
-        return "forward:/templates/index.html";
+        // CORRECCIÓN: Devuelve solo el nombre de la plantilla
+        return "index"; 
     }
-}
+}   

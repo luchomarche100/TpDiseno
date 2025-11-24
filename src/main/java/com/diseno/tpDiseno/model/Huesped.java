@@ -39,6 +39,7 @@ public class Huesped {
     @Column(nullable = false)
     private String nroDocumento;
 
+        @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private PosicionFrenteIVAEnum posIVA;
 
