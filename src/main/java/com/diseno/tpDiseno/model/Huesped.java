@@ -17,6 +17,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import com.diseno.tpDiseno.util.PosicionFrenteIVAEnum;
 
 @Entity
 @Getter
@@ -27,6 +28,7 @@ public class Huesped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
 //Todos lo que tienen @Column(nullable = false) son obligatorios.
     @Column(nullable = false)
     private String nombres;
@@ -38,7 +40,7 @@ public class Huesped {
     private String nroDocumento;
 
     @Column(nullable = false)
-    private String posIVA;
+    private PosicionFrenteIVAEnum posIVA;
 
     @Column(nullable = false)
     private Date fechaDeNacimiento;
@@ -58,6 +60,7 @@ public class Huesped {
 
     @Column(nullable = false)
     private String nacionalidad;
+
 //Estos no son obligatorios
     private String CUIT;
     private String email;

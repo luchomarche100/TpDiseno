@@ -185,7 +185,12 @@ public class ValidarHuesped {
     }
 
     private boolean esFechaNacimientoValida(LocalDate fecha) {
+        LocalDate fechaLimite = LocalDate.now();
+        if(fecha.isAfter(fechaLimite)){
+            return false;
+        }
         return fecha != null; // acá después podés agregar lógica (mayor de 18, etc.)
+
     }
 
     private boolean esNumeroPositivo(Integer valor) {

@@ -14,6 +14,7 @@ import com.diseno.tpDiseno.model.Direccion;
 import com.diseno.tpDiseno.model.Huesped;
 import com.diseno.tpDiseno.util.ErrorCampo;
 import com.diseno.tpDiseno.util.TipoDocumentoEnum;
+import com.diseno.tpDiseno.util.PosicionFrenteIVAEnum;
 
 import lombok.Data;
 
@@ -62,7 +63,7 @@ public class GestorHuesped {
         huesped.setTipoDocumento(TipoDocumentoEnum.valueOf(request.getTipoDocumento()));
         huesped.setNroDocumento(request.getNroDocumento());
         huesped.setCUIT(request.getCUIT());
-        huesped.setPosIVA(request.getPosIVA());
+        huesped.setPosIVA(PosicionFrenteIVAEnum.valueOf(request.getPosIVA()));
         huesped.setFechaDeNacimiento(Date.valueOf(request.getFechaDeNacimiento()));
         huesped.setEmail(request.getEmail());
         huesped.setTelefono(request.getTelefono());

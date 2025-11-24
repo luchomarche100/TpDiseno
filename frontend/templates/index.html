@@ -9,7 +9,7 @@
 <body>
     <h1>Formulario de Alta de Huesped</h1>
     <form id="huespedForm">
-        <label for="nombre">Nombre:</label>
+        <label for="Nombre/s">Nombre:</label>
         <input type="text" id="nombre" name="nombres" required><br><br>
 
         <label for="apellido">Apellido:</label>
@@ -29,8 +29,15 @@
         <label for="cuit">CUIT:</label>
         <input type="text" id="cuit" name="cuit"><br><br>
 
-        <label for="posIVA">Posicion Frente al IVA:</label>
-        <input type="text" id="posIVA" name="posIVA" required><br><br>
+        <label for="posicionIVA">Posición frente al IVA:</label>
+        <select id="posicionIVA" name="posicionIVA" required>
+            <option value="">-- Seleccione Posición --</option>
+            
+            <option value="Responsable Inscripto">Responsable Inscripto</option>
+            <option value="Monotributista">Monotributista</option>
+            <option value="Consumidor final">Consumidor Final</option>
+            <option value="Exento">Exento</option>
+    </select>><br><br>
 
         <label for="fechaDeNacimiento">Fecha de Nacimiento:</label>
         <input type="date" id="fechaDeNacimiento" name="fechaDeNacimiento" required><br><br>
