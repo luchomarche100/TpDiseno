@@ -8,8 +8,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.diseno.tpDiseno.Service.GestorHuesped;
+import com.diseno.tpDiseno.dto.request.BuscarHuespedRequest;
 import com.diseno.tpDiseno.dto.request.DarAltaRequest;
+import com.diseno.tpDiseno.dto.response.BuscarHuespedResponse;
 import com.diseno.tpDiseno.dto.response.DarAltaResponse;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping("/api/huespedes")
@@ -26,4 +31,9 @@ public class HuespedController {
         DarAltaResponse response = gestorHuesped.darAltaHuesped(request);
         return ResponseEntity.ok(response);
     }
+    @PostMapping("/buscar")
+    public ResponseEntity<BuscarHuespedResponse> buscarHuesped(@RequestBody BuscarHuespedRequest huesped) {
+        return ResponseEntity.ok(gestorHuesped.buscarHuespedes(huesped));
+    }
+    
 }

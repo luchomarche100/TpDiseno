@@ -3,13 +3,19 @@ package com.diseno.tpDiseno.Service;
 import java.sql.Date;
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.diseno.tpDiseno.Dao.HuespedDAO;
 import com.diseno.tpDiseno.Exception.ReglaNegocioException;
+import com.diseno.tpDiseno.dto.DireccionDTO;
+import com.diseno.tpDiseno.dto.HuespedDTO;
+import com.diseno.tpDiseno.dto.request.BuscarHuespedRequest;
 import com.diseno.tpDiseno.dto.request.DarAltaRequest;
 import com.diseno.tpDiseno.dto.request.DireccionRequest;
+import com.diseno.tpDiseno.dto.response.BuscarHuespedResponse;
 import com.diseno.tpDiseno.dto.response.DarAltaResponse;
+import com.diseno.tpDiseno.dto.response.ResultadoOperacion;
 import com.diseno.tpDiseno.model.Direccion;
 import com.diseno.tpDiseno.model.Huesped;
 import com.diseno.tpDiseno.util.ErrorCampo;
@@ -99,6 +105,75 @@ public class GestorHuesped {
         direccion.setPais(direccionRequest.getPais());
         return direccion;
     }
-    
 
-} 
+    public BuscarHuespedResponse buscarHuespedes(BuscarHuespedRequest request) {
+    BuscarHuespedResponse response = new BuscarHuespedResponse();
+
+    String tipoDocumentoStr = null;
+    if (request.getTipoDocumento() != null && !request.getTipoDocumento().trim().isEmpty()) {
+        try {
+            TipoDocumentoEnum.valueOf(request.getTipoDocumento().toUpperCase());
+            tipoDocumentoStr = request.getTipoDocumento().toUpperCase();
+        } catch (IllegalArgumentException e) {
+            throw new ReglaNegocioException(
+                "TIPO_DOCUMENTO_INVALIDO",
+                "El tipo de documento proporcionado no es válido",
+                null
+            );
+        }
+    }
+
+    List<Huesped> huespedes = huespedDAO.buscarHuespedes(
+        request.getNombre(), 
+        request.getApellido(), 
+        tipoDocumentoStr,
+        request.getNroDocumento()
+    );
+    
+    if (huespedes.isEmpty()) {
+        response.setResultadoOperacion(new ResultadoOperacion("No se encontraron huéspedes con los criterios proporcionados"));
+    } else {
+        List<HuespedDTO> huespedDTOs = new java.util.ArrayList<>();
+        for(Huesped h : huespedes) {
+            HuespedDTO dto = mapearHuespedADTO(h);
+            huespedDTOs.add(dto);
+        }
+        response.setHuespedes(huespedDTOs);
+        response.setResultadoOperacion(new ResultadoOperacion("Se encontraron " + huespedes.size() + " huéspedes"));
+    }
+
+    return response;
+}
+
+//Mapear un Husped a un HuespedDTO            
+    private HuespedDTO mapearHuespedADTO(Huesped h) {
+    HuespedDTO dto = new HuespedDTO();
+            dto.setId(h.getId());
+            dto.setId(h.getId());
+            dto.setNombres(h.getNombres());
+            dto.setApellido(h.getApellido());
+            dto.setTipoDocumento(h.getTipoDocumento());
+            dto.setNroDocumento(h.getNroDocumento());
+            dto.setCUIT(h.getCUIT());
+            dto.setPosIVA(h.getPosIVA());
+            dto.setFechaDeNacimiento(h.getFechaDeNacimiento());
+            dto.setEmail(h.getEmail());
+            dto.setTelefono(h.getTelefono());
+            dto.setOcupacion(h.getOcupacion());
+            dto.setNacionalidad(h.getNacionalidad());
+            //Direccion
+            Direccion direccion = h.getDireccion();
+            DireccionDTO direccionDTO = new DireccionDTO();
+            direccionDTO.setCodigoPostal(direccion.getCodigoPostal());
+            direccionDTO.setCalle(direccion.getCalle());
+            direccionDTO.setNroCalle(direccion.getNroCalle());
+            direccionDTO.setPiso(direccion.getPiso());
+            direccionDTO.setNroDepartamento(direccion.getNroDepartamento());
+            direccionDTO.setLocalidad(direccion.getLocalidad());
+            direccionDTO.setProvincia(direccion.getProvincia());
+            direccionDTO.setPais(direccion.getPais());
+            dto.setDireccion(direccionDTO);
+
+            return dto;
+        }
+}
