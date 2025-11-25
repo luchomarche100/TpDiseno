@@ -10,6 +10,8 @@ import com.diseno.tpDiseno.Exception.ReglaNegocioException;
 import com.diseno.tpDiseno.dto.request.DarAltaRequest;
 import com.diseno.tpDiseno.dto.request.DireccionRequest;
 import com.diseno.tpDiseno.util.ErrorCampo;
+import com.diseno.tpDiseno.dto.request.LoginRequest;
+
 
 @Component
 public class ValidarHuesped {
@@ -199,5 +201,21 @@ public class ValidarHuesped {
 
     private boolean esNumeroNoNegativo(Integer valor) {
         return valor != null && valor >= 0;
+    }
+
+    public List <ErrorCampo> validarLogin (LoginRequest req) {
+        List<ErrorCampo> errores = new ArrayList<>();
+
+        // 1. Verificar Nombre de Usuario
+    if (req.getUsername() == null || req.getUsername().trim().isEmpty()) {
+        errores.add(crearError("username", "El nombre de usuario no puede estar vacío."));
+    }
+
+    // 2. Verificar Contraseña
+    if (req.getPassword() == null || req.getPassword().isEmpty()) {
+        errores.add(crearError("password", "La contraseña es obligatoria."));
+    }
+
+        return errores;
     }
 }

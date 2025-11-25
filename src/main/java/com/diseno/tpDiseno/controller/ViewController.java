@@ -8,7 +8,16 @@ public class ViewController {
 
     @GetMapping("/")
     public String index() {
-        // CORRECCIÓN: Devuelve solo el nombre de la plantilla
         return "index"; 
+    }
+
+    @GetMapping("/login")
+    public String mostrarLogin() {
+        return "login"; 
+    }
+
+    @GetMapping("/register")
+    public String mostrarRegister() {
+        return "register"; 
     }
 }   
