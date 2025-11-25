@@ -10,8 +10,8 @@ import com.diseno.tpDiseno.Exception.ReglaNegocioException;
 import com.diseno.tpDiseno.dto.DireccionDTO;
 import com.diseno.tpDiseno.dto.HuespedDTO;
 import com.diseno.tpDiseno.dto.request.BuscarHuespedRequest;
-import com.diseno.tpDiseno.dto.request.DarAltaRequest;
 import com.diseno.tpDiseno.dto.request.DireccionRequest;
+import com.diseno.tpDiseno.dto.request.SolicitudHuespedRequest;
 import com.diseno.tpDiseno.dto.response.BuscarHuespedResponse;
 import com.diseno.tpDiseno.dto.response.DarAltaResponse;
 import com.diseno.tpDiseno.dto.response.ResultadoOperacion;
@@ -29,7 +29,7 @@ public class GestorHuesped {
     private final HuespedDAO huespedDAO;
     private final Validador validador;
     
-    public DarAltaResponse darAltaHuesped(DarAltaRequest request) {
+    public DarAltaResponse darAltaHuesped(SolicitudHuespedRequest request) {
         DarAltaResponse response = new DarAltaResponse();
         
         List<ErrorCampo> errores = validador.validar(request);
@@ -69,7 +69,8 @@ public class GestorHuesped {
         huesped.setNroDocumento(request.getNroDocumento());
         huesped.setCUIT(request.getCUIT());
         huesped.setPosIVA(PosicionFrenteIVAEnum.valueOf(request.getPosIVA()));
-        huesped.setFechaDeNacimiento(Date.valueOf(request.getFechaDeNacimiento()));
+        huesped.setFechaDeNacimiento(request.getFechaDeNacimiento());
+
         huesped.setEmail(request.getEmail());
         huesped.setTelefono(request.getTelefono());
         huesped.setOcupacion(request.getOcupacion());
@@ -176,4 +177,44 @@ public class GestorHuesped {
 
             return dto;
         }
+
+    public HuespedDTO modificarHuesped(SolicitudHuespedRequest huesped) {
+        Huesped huespedExistente = (huespedDAO.findByNroDocumento(huesped.getNroDocumento())).get(0);
+
+            List<ErrorCampo> errores = validador.validar(huesped);
+        if(!errores.isEmpty()) {
+            throw new ReglaNegocioException(
+                    "DATOS_OBLIGATORIOS_INCOMPLETOS",
+                    "Faltan completar uno o más datos obligatorios",
+                    errores
+            );
+        }
+
+
+    // Actualizar los campos del huésped existente
+        huespedExistente.setNombres(huesped.getNombres());
+        huespedExistente.setApellido(huesped.getApellido());
+        huespedExistente.setTipoDocumento(TipoDocumentoEnum.valueOf(huesped.getTipoDocumento()));
+        huespedExistente.setNroDocumento(huesped.getNroDocumento());
+        huespedExistente.setCUIT(huesped.getCUIT());
+        huespedExistente.setPosIVA(PosicionFrenteIVAEnum.valueOf(huesped.getPosIVA()));
+        huespedExistente.setFechaDeNacimiento(huesped.getFechaDeNacimiento());
+        huespedExistente.setEmail(huesped.getEmail());
+        huespedExistente.setTelefono(huesped.getTelefono());
+        huespedExistente.setOcupacion(huesped.getOcupacion());
+        huespedExistente.setNacionalidad(huesped.getNacionalidad());
+        // Actualizar la dirección
+        Direccion direccionExistente = huespedExistente.getDireccion();
+        DireccionRequest direccionDTO = huesped.getDireccion();
+        direccionExistente.setCodigoPostal(direccionDTO.getCodigoPostal());
+        direccionExistente.setCalle(direccionDTO.getCalle());
+        direccionExistente.setNroCalle(direccionDTO.getNroCalle());
+        direccionExistente.setPiso(direccionDTO.getPiso());
+        direccionExistente.setNroDepartamento(direccionDTO.getNroDepartamento());
+        direccionExistente.setLocalidad(direccionDTO.getLocalidad());
+        direccionExistente.setProvincia(direccionDTO.getProvincia());
+        direccionExistente.setPais(direccionDTO.getPais());
+        huespedDAO.save(huespedExistente);
+        return mapearHuespedADTO(huespedExistente);
+    }
 }

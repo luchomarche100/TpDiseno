@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import lombok.Data;
 
 @Data
-public class DarAltaRequest {
+public class SolicitudHuespedRequest {
 
     private String nombres;
     private String apellido;

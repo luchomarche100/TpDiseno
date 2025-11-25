@@ -8,10 +8,10 @@ import lombok.Data;
 import org.springframework.stereotype.Component;
 
 import com.diseno.tpDiseno.Exception.ReglaNegocioException;
-import com.diseno.tpDiseno.dto.request.DarAltaRequest;
 import com.diseno.tpDiseno.dto.request.DireccionRequest;
 import com.diseno.tpDiseno.dto.request.LoginRequest;
 import com.diseno.tpDiseno.dto.request.MostrarEstadoRequest;
+import com.diseno.tpDiseno.dto.request.SolicitudHuespedRequest;
 import com.diseno.tpDiseno.util.ErrorCampo;
 
 @Component
@@ -60,7 +60,7 @@ public class Validador {
         return false;
     }
     
-    public List<ErrorCampo> validar(DarAltaRequest req) {
+    public List<ErrorCampo> validar(SolicitudHuespedRequest req) {
         if (req == null) {
             throw new ReglaNegocioException(
                     "HUESPED_NULO",

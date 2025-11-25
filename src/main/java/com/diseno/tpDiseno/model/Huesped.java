@@ -1,6 +1,7 @@
 package com.diseno.tpDiseno.model;
 
 import java.sql.Date;
+import java.time.LocalDate;
 
 import com.diseno.tpDiseno.util.TipoDocumentoEnum;
 
@@ -43,7 +44,7 @@ public class Huesped {
     private PosicionFrenteIVAEnum posIVA;
 
     @Column(nullable = false)
-    private Date fechaDeNacimiento;
+    private LocalDate fechaDeNacimiento;
  
     @Column(nullable = false, columnDefinition = "VARCHAR(255)")
     private String telefono;
