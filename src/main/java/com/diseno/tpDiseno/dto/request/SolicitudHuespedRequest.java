@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 public class SolicitudHuespedRequest {
-
+    private long id;
     private String nombres;
     private String apellido;
     private String nroDocumento;

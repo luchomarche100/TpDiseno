@@ -179,7 +179,9 @@ public class GestorHuesped {
         }
 
     public HuespedDTO modificarHuesped(SolicitudHuespedRequest huesped) {
-        Huesped huespedExistente = (huespedDAO.findByNroDocumento(huesped.getNroDocumento())).get(0);
+        Huesped huespedExistente = (huespedDAO.findById(huesped.getId())).orElseThrow(() -> 
+        new ReglaNegocioException("HUESPED_NO_ENCONTRADO", "No se encontró un huésped con el ID proporcionado", null)
+        );
 
             List<ErrorCampo> errores = validador.validar(huesped);
         if(!errores.isEmpty()) {
