@@ -8,6 +8,16 @@ public class ViewController {
 
     @GetMapping("/")
     public String index() {
-        return "forward:/templates/index.html";
+        return "index"; 
     }
-}
+
+    @GetMapping("/login")
+    public String mostrarLogin() {
+        return "login"; 
+    }
+
+    @GetMapping("/register")
+    public String mostrarRegister() {
+        return "register"; 
+    }
+}   

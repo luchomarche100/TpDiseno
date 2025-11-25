@@ -17,6 +17,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import com.diseno.tpDiseno.util.PosicionFrenteIVAEnum;
 
 @Entity
 @Getter
@@ -37,8 +38,9 @@ public class Huesped {
     @Column(nullable = false, columnDefinition = "VARCHAR(255)")
     private String nroDocumento;
 
-    @Column(nullable = false, columnDefinition = "VARCHAR(255)")
-    private String posIVA;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private PosicionFrenteIVAEnum posIVA;
 
     @Column(nullable = false)
     private Date fechaDeNacimiento;
