@@ -3,17 +3,8 @@ package com.diseno.tpDiseno.dto;
 import java.sql.Date;
 import java.time.LocalDate;
 
-import com.diseno.tpDiseno.model.Direccion;
 import com.diseno.tpDiseno.util.TipoDocumentoEnum;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
 import lombok.Data;
 
     @Data

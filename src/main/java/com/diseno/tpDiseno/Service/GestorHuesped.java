@@ -3,7 +3,6 @@ package com.diseno.tpDiseno.Service;
 import java.sql.Date;
 import java.util.List;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.diseno.tpDiseno.Dao.HuespedDAO;
@@ -20,6 +19,7 @@ import com.diseno.tpDiseno.model.Direccion;
 import com.diseno.tpDiseno.model.Huesped;
 import com.diseno.tpDiseno.util.ErrorCampo;
 import com.diseno.tpDiseno.util.TipoDocumentoEnum;
+import com.diseno.tpDiseno.util.PosicionFrenteIVAEnum;
 
 import lombok.Data;
 
@@ -27,12 +27,12 @@ import lombok.Data;
 @Data
 public class GestorHuesped {
     private final HuespedDAO huespedDAO;
-    private final Validador validadorHuesped;
+    private final Validador validador;
     
     public DarAltaResponse darAltaHuesped(SolicitudHuespedRequest request) {
         DarAltaResponse response = new DarAltaResponse();
         
-        List<ErrorCampo> errores = validadorHuesped.validar(request);
+        List<ErrorCampo> errores = validador.validar(request);
         if(!errores.isEmpty()) {
             throw new ReglaNegocioException(
                     "DATOS_OBLIGATORIOS_INCOMPLETOS",
@@ -68,8 +68,9 @@ public class GestorHuesped {
         huesped.setTipoDocumento(TipoDocumentoEnum.valueOf(request.getTipoDocumento()));
         huesped.setNroDocumento(request.getNroDocumento());
         huesped.setCUIT(request.getCUIT());
-        huesped.setPosIVA(request.getPosIVA());
+        huesped.setPosIVA(PosicionFrenteIVAEnum.valueOf(request.getPosIVA()));
         huesped.setFechaDeNacimiento(request.getFechaDeNacimiento());
+
         huesped.setEmail(request.getEmail());
         huesped.setTelefono(request.getTelefono());
         huesped.setOcupacion(request.getOcupacion());
@@ -155,7 +156,7 @@ public class GestorHuesped {
             dto.setTipoDocumento(h.getTipoDocumento());
             dto.setNroDocumento(h.getNroDocumento());
             dto.setCUIT(h.getCUIT());
-            dto.setPosIVA(h.getPosIVA());
+            dto.setPosIVA(h.getPosIVA().name());
             dto.setFechaDeNacimiento(h.getFechaDeNacimiento());
             dto.setEmail(h.getEmail());
             dto.setTelefono(h.getTelefono());
@@ -180,7 +181,7 @@ public class GestorHuesped {
     public HuespedDTO modificarHuesped(SolicitudHuespedRequest huesped) {
         Huesped huespedExistente = (huespedDAO.findByNroDocumento(huesped.getNroDocumento())).get(0);
 
-            List<ErrorCampo> errores = validadorHuesped.validar(huesped);
+            List<ErrorCampo> errores = validador.validar(huesped);
         if(!errores.isEmpty()) {
             throw new ReglaNegocioException(
                     "DATOS_OBLIGATORIOS_INCOMPLETOS",
@@ -196,7 +197,7 @@ public class GestorHuesped {
         huespedExistente.setTipoDocumento(TipoDocumentoEnum.valueOf(huesped.getTipoDocumento()));
         huespedExistente.setNroDocumento(huesped.getNroDocumento());
         huespedExistente.setCUIT(huesped.getCUIT());
-        huespedExistente.setPosIVA(huesped.getPosIVA());
+        huespedExistente.setPosIVA(PosicionFrenteIVAEnum.valueOf(huesped.getPosIVA()));
         huespedExistente.setFechaDeNacimiento(huesped.getFechaDeNacimiento());
         huespedExistente.setEmail(huesped.getEmail());
         huespedExistente.setTelefono(huesped.getTelefono());
