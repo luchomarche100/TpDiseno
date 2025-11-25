@@ -1,0 +1,5 @@
+CU:02 Buscar huésped. Include: CU 10 Modificar Huesped; Extend: CU 09 Dar de alta
+CU:04 Reservar Habitación Include: CU 05 Mostrar estado de habitaciones; Extend: no posee
+CU:05 Mostrar estado de habitaciones;  Include: NO; extend: no posee
+CU:09 Dar de alta Huésped. Include: NO; extend: no posee
+CU:15 Ocupar Habitación.  Include:CU 05 Mostrar estado de habitaciones ; extend: no posee
