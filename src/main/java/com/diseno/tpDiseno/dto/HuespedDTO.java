@@ -1,6 +1,7 @@
 package com.diseno.tpDiseno.dto;
 
 import java.sql.Date;
+import java.time.LocalDate;
 
 import com.diseno.tpDiseno.model.Direccion;
 import com.diseno.tpDiseno.util.TipoDocumentoEnum;
@@ -24,7 +25,7 @@ public class HuespedDTO {
     private String apellido;
     private String nroDocumento;
     private String posIVA;
-    private Date fechaDeNacimiento; 
+    private LocalDate fechaDeNacimiento; 
     private String telefono;
     private String ocupacion;
     private DireccionDTO direccion;
