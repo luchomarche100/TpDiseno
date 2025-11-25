@@ -27,4 +27,9 @@ public class ViewController {
         return "buscar";
     }
     
+
+    @GetMapping("/habitaciones/estado")
+    public String mostrarEstadoHabitaciones() {
+        return "EstadoHabitacion";
+    }
 }   

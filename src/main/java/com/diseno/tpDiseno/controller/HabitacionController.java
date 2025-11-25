@@ -21,7 +21,7 @@ public class HabitacionController {
         this.gestorHabitacion = gestorHabitacion;
     }
 //Caso de uso 05 mostrar estado de habitacion
-    @PostMapping
+    @PostMapping("/estado")
     public ResponseEntity<MostrarEstadoResponse> mostrarEstado(@RequestBody MostrarEstadoRequest request) {
         MostrarEstadoResponse response= gestorHabitacion.mostrarEstado(request);
         return ResponseEntity.ok(response);
