@@ -4,15 +4,60 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.Data;
 import org.springframework.stereotype.Component;
 
 import com.diseno.tpDiseno.Exception.ReglaNegocioException;
 import com.diseno.tpDiseno.dto.request.DarAltaRequest;
 import com.diseno.tpDiseno.dto.request.DireccionRequest;
+import com.diseno.tpDiseno.dto.request.MostrarEstadoRequest;
 import com.diseno.tpDiseno.util.ErrorCampo;
 
 @Component
-public class ValidarHuesped {
+public class Validador {
+
+    public boolean validarFechaHasta(MostrarEstadoRequest request) {
+        if (request == null) {
+            throw new ReglaNegocioException(
+                "REQUEST_NULO",
+                "El request no puede ser nulo.",
+                List.of(crearError("fechaHasta", "Request nulo"))
+            );
+        }
+
+        LocalDate fechaHasta = request.getFechaHasta();
+        if (fechaHasta == null) {
+            throw new ReglaNegocioException(
+                "Fecha_Hasta_Nula",
+                "La fecha hasta no puede ser nula.",
+                List.of(crearError("fechaHasta", "La fecha hasta no puede ser nula."))
+            );
+        }
+
+        LocalDate hoy = LocalDate.now();
+        if (fechaHasta.isBefore(hoy)) {
+            throw new ReglaNegocioException(
+                "Fecha_Hasta_Anterior",
+                "La fecha hasta no puede ser anterior a hoy.",
+                List.of(crearError("fechaHasta", "La fecha hasta no puede ser anterior a hoy."))
+            );
+        }
+
+        LocalDate fechaDesde = request.getFechaDesde();
+        if (fechaDesde != null && fechaHasta.isBefore(fechaDesde)) {
+            throw new ReglaNegocioException(
+                "Fecha_Hasta_Menor_Que_Desde",
+                "La fecha hasta no puede ser anterior a la fecha desde.",
+                List.of(crearError("fechaHasta", "La fecha hasta no puede ser anterior a la fecha desde."))
+            );
+        }
+
+        return true;
+    }
+    
+    public boolean validarFechaDesde(MostrarEstadoRequest request) {
+        return false;
+    }
     
     public List<ErrorCampo> validar(DarAltaRequest req) {
         if (req == null) {

@@ -27,7 +27,7 @@ import lombok.Data;
 @Data
 public class GestorHuesped {
     private final HuespedDAO huespedDAO;
-    private final ValidarHuesped validadorHuesped;
+    private final Validador validadorHuesped;
     
     public DarAltaResponse darAltaHuesped(DarAltaRequest request) {
         DarAltaResponse response = new DarAltaResponse();
