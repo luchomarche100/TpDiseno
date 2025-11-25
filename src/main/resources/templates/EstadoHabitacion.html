@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Estado de Habitaciones</title>
+  <link rel="stylesheet" href="/css/EstadoHabitacion.css" />
+</head>
+<body>
+  <div class="page-container">
+    <h1 class="page-title">Estado de habitaciones</h1>
+
+    <div class="card">
+      <!-- FILTROS -->
+      <div class="filters-row">
+        <div class="field">
+          <label for="fechaDesde">Desde fecha:</label>
+          <input type="date" id="fechaDesde" placeholder="dd/mm/aaaa" />
+        </div>
+        <div class="field">
+          <label for="fechaHasta">Hasta fecha:</label>
+          <input type="date" id="fechaHasta" placeholder="dd/mm/aaaa" />
+        </div>
+        <div class="buttons-row">
+          <button class="btn btn-primary" id="btnBuscar">Aceptar</button>
+          <button class="btn btn-secondary" id="btnLimpiar">Cancelar</button>
+        </div>
+      </div>
+
+      <div id="error" class="error-message"></div>
+
+      <!-- LEYENDA -->
+      <div class="legend">
+        <div class="legend-item">
+          <span class="legend-color color-reservada"></span> Reservada
+        </div>
+        <div class="legend-item">
+          <span class="legend-color color-ocupada"></span> Ocupada
+        </div>
+        <div class="legend-item">
+          <span class="legend-color color-disponible"></span> Disponible
+        </div>
+        <div class="legend-item">
+          <span class="legend-color color-mantenimiento"></span> Mantenimiento
+        </div>
+      </div>
+
+      <!-- GRILLA -->
+      <div class="grid-container" id="gridContainer">
+        <!-- acá se inyecta la tabla por JS -->
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/EstadoHabitaciones.js"></script>
+</body>
+</html>

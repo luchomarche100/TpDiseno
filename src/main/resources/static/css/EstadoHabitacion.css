@@ -1,0 +1,183 @@
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: linear-gradient(180deg, #234c7a, #111827);
+  color: #f9fafb;
+}
+
+.page-container {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 0 24px 40px;
+}
+
+.page-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 24px;
+}
+
+.card {
+  background: #111827;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+}
+
+.filters-row {
+  display: flex;
+  gap: 24px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 200px;
+}
+
+.field label {
+  font-size: 14px;
+}
+
+.field input[type="date"] {
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #4b5563;
+  background: #0f172a;
+  color: #f9fafb;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.field input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  cursor: pointer;
+}
+
+.buttons-row {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.btn {
+  border-radius: 999px;
+  padding: 8px 18px;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: #2563eb;
+  color: white;
+}
+
+.btn-secondary {
+  background: #374151;
+  color: #e5e7eb;
+}
+
+.error-message {
+  margin-top: 8px;
+  color: #fca5a5;
+  font-size: 14px;
+}
+
+.legend {
+  display: flex;
+  gap: 16px;
+  margin: 16px 0 8px;
+  font-size: 13px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legend-color {
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  border: 1px solid #374151;
+}
+
+.color-disponible { background: #22c55e; }
+.color-ocupada { background: #ef4444; }
+.color-reservada { background: #a855f7; }
+.color-mantenimiento { background: #6b7280; }
+
+/* >>> más alta para que la tabla (camas) sea más grande */
+.grid-container {
+  margin-top: 8px;
+  border-radius: 8px;
+  overflow: auto;
+  border: 1px solid #374151;
+  background: #020617;
+  max-height: 560px; /* antes 420px */
+}
+
+/* >>> tabla un poco más grande */
+table.estado-grid {
+  border-collapse: collapse;
+  min-width: 100%;
+  font-size: 13px; /* antes 12px */
+}
+
+.estado-grid th,
+.estado-grid td {
+  border: 1px solid #1f2937;
+  text-align: center;
+  padding: 4px;
+  white-space: nowrap;
+}
+
+.estado-grid thead {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: #020617;
+}
+
+.tipo-header {
+  font-weight: 600;
+  font-size: 11px;
+  background: #0f172a;
+  color: #e5e7eb;
+}
+
+/* >>> fechas MUCHO más chicas y columna más angosta */
+.fecha-col,
+.fecha-header {
+  position: sticky;
+  left: 0;
+  background: #020617;
+  z-index: 3;
+  font-weight: 500;
+  font-size: 15px;     /* bien chico */
+  padding: 1px 6px;   /* poco padding */
+  width: 70px;        /* columna angosta */
+}
+
+.fecha-col {
+  z-index: 1;
+  text-align: left;
+}
+
+/* >>> celdas donde se pintan las camas más grandes */
+.cell-estado {
+  width: 32px;   /* antes 22px */
+  height: 32px;  /* antes 22px */
+  padding: 0;
+}
+
+.cell-disponible { background: #22c55e; }
+.cell-ocupada { background: #ef4444; }
+.cell-reservada { background: #a855f7; }
+.cell-mantenimiento { background: #6b7280; }

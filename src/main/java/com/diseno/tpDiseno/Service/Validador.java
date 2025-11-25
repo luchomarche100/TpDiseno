@@ -57,7 +57,34 @@ public class Validador {
     }
     
     public boolean validarFechaDesde(MostrarEstadoRequest request) {
-        return false;
+        if (request == null) {
+            throw new ReglaNegocioException(
+                    "REQUEST_NULO",
+                    "El request no puede ser nulo.",
+                    null
+            );
+        }
+
+        LocalDate fechaDesde = request.getFechaDesde();
+        if (fechaDesde == null) {
+            throw new ReglaNegocioException(
+                    "FECHA_DESDE_NULA",
+                    "La fecha desde no puede ser nula.",
+                    null
+            );
+        }
+
+        // La fecha desde debe ser hoy o posterior
+        LocalDate hoy = LocalDate.now();
+        if (fechaDesde.isBefore(hoy)) {
+            throw new ReglaNegocioException(
+                    "FECHA_DESDE_PASADA",
+                    "La fecha desde no puede ser anterior a hoy.",
+                    null
+            );
+        }
+
+        return true;
     }
     
     public List<ErrorCampo> validar(SolicitudHuespedRequest req) {

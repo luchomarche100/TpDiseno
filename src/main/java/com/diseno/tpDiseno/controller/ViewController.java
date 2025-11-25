@@ -20,4 +20,9 @@ public class ViewController {
     public String mostrarRegister() {
         return "register"; 
     }
+
+    @GetMapping("/habitaciones/estado")
+    public String mostrarEstadoHabitaciones() {
+        return "EstadoHabitacion";
+    }
 }   
