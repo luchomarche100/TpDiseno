@@ -29,41 +29,41 @@ public class Huesped {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//Todos lo que tienen @Column(nullable = false) son obligatorios.
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "VARCHAR(255)")
     private String nombres;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "VARCHAR(255)")
     private String apellido;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "VARCHAR(255)")
     private String nroDocumento;
 
-        @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private PosicionFrenteIVAEnum posIVA;
 
     @Column(nullable = false)
     private Date fechaDeNacimiento;
  
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "VARCHAR(255)")
     private String telefono;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "VARCHAR(255)")
     private String ocupacion;
 
     @OneToOne(cascade = CascadeType.ALL)
-       private Direccion direccion;
+    private Direccion direccion;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private TipoDocumentoEnum tipoDocumento;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "VARCHAR(255)")
     private String nacionalidad;
 
-//Estos no son obligatorios
+    @Column(columnDefinition = "VARCHAR(255)")
     private String CUIT;
+    
+    @Column(columnDefinition = "VARCHAR(255)")
     private String email;
-
 }
