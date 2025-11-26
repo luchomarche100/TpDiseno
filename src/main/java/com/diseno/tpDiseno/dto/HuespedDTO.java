@@ -1,6 +1,5 @@
 package com.diseno.tpDiseno.dto;
 
-import java.sql.Date;
 import java.time.LocalDate;
 
 import com.diseno.tpDiseno.util.TipoDocumentoEnum;
