@@ -25,6 +25,11 @@
             color: #555;
             margin-bottom: 20px;
         }
+        button {
+            padding: 10px 20px;
+            font-size: 15px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -33,7 +38,6 @@
     <p class="comentario">Puede omitir campos.</p>
 
     <form id="form-buscar-huesped">
-
 
         <div class="form-group">
             <label for="nombre">Nombre</label>
@@ -61,7 +65,13 @@
             <input type="text" id="numero-doc" name="numero-doc">
         </div>
 
+        <!-- 🔵 BOTÓN QUE EJECUTA EL JAVASCRIPT -->
+        <button type="submit">Buscar</button>
+
     </form>
-<script src="buscar.js"></script>
+    <div id="resultados"></div>
+    <!-- Enlazar el JS -->
+    <script src="/js/buscar.js"></script>
+
 </body>
 </html>
