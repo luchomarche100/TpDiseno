@@ -2,7 +2,7 @@ package com.diseno.tpDiseno.dto.response;
 import java.util.List;
 
 import com.diseno.tpDiseno.dto.HuespedDTO;
-import com.diseno.tpDiseno.model.Huesped;
+
 
 import lombok.Data;
 
