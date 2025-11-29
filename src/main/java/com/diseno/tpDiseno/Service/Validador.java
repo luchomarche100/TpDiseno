@@ -61,7 +61,7 @@ public class Validador {
             throw new ReglaNegocioException(
                     "REQUEST_NULO",
                     "El request no puede ser nulo.",
-                    null
+                    List.of(crearError("fechaDesde", "No se enviaron datos."))
             );
         }
 
@@ -70,7 +70,7 @@ public class Validador {
             throw new ReglaNegocioException(
                     "FECHA_DESDE_NULA",
                     "La fecha desde no puede ser nula.",
-                    null
+                    List.of(crearError("fechaDesde", "La fecha desde no puede ser nula."))
             );
         }
 
