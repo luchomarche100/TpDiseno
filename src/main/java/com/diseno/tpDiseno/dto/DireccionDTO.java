@@ -1,6 +1,6 @@
 package com.diseno.tpDiseno.dto;
 
-import jakarta.persistence.Column;
+
 import lombok.Data;
 @Data
 public class DireccionDTO {

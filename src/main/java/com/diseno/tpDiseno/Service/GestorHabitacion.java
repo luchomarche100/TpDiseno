@@ -1,7 +1,6 @@
 package com.diseno.tpDiseno.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List; 
 
@@ -14,6 +13,7 @@ import com.diseno.tpDiseno.dto.HabitacionEstadoDTO;
 import com.diseno.tpDiseno.dto.request.MostrarEstadoRequest;
 import com.diseno.tpDiseno.dto.response.MostrarEstadoResponse;
 import com.diseno.tpDiseno.model.Habitacion;
+import com.diseno.tpDiseno.model.Reserva;
 
 import lombok.Data;
 
@@ -22,6 +22,7 @@ import lombok.Data;
 public class GestorHabitacion {
     private final HabitacionDAO habitacionDao;
     private final Validador validarHabitaciones;
+    private final GestorReserva gestorReserva;
     
     public MostrarEstadoResponse mostrarEstado(MostrarEstadoRequest request) {
       
@@ -42,9 +43,12 @@ public class GestorHabitacion {
                 null      
             );
         }
-
-        List<Habitacion> habitaciones = habitacionDao.findAllByOrderByTipoHabitacionAscNumeroAsc();
         
+        List<Habitacion> habitaciones = habitacionDao.findAllByOrderByTipoHabitacionAscNumeroAsc();
+        List<Reserva> reservas = gestorReserva.obtenerReservaPorFecha(request.getFechaDesde(), request.getFechaHasta());
+       
+        System.out.println("DEBUG: Total habitaciones encontradas: " + habitaciones.size());
+        System.out.println("DEBUG: Total reservas encontradas: " + (reservas != null ? reservas.size() : 0));
        
         MostrarEstadoResponse response = new MostrarEstadoResponse();
         response.setFechaDesde(request.getFechaDesde());
@@ -64,7 +68,8 @@ public class GestorHabitacion {
             List<EstadoDiaDTO> estadosPorDia = generarEstadosPorDia(
                 request.getFechaDesde(), 
                 request.getFechaHasta(), 
-                habitacion
+                habitacion,
+                reservas
             );
             dto.setEstadosPorDia(estadosPorDia);
             
@@ -75,7 +80,7 @@ public class GestorHabitacion {
         return response;
     }
 
-    private List<EstadoDiaDTO> generarEstadosPorDia(LocalDate desde, LocalDate hasta, Habitacion habitacion) {
+    private List<EstadoDiaDTO> generarEstadosPorDia(LocalDate desde, LocalDate hasta, Habitacion habitacion, List<Reserva> reservas) {
         List<EstadoDiaDTO> estados = new ArrayList<>();
         
         LocalDate fechaActual = desde;
@@ -84,7 +89,7 @@ public class GestorHabitacion {
             estadoDia.setFecha(fechaActual);
             
             // Determinar estado según lógica de negocio
-            String estado = determinarEstado(habitacion, fechaActual);
+            String estado = determinarEstado(habitacion, fechaActual, reservas);
             estadoDia.setEstado(estado);
             
             estados.add(estadoDia);
@@ -94,24 +99,27 @@ public class GestorHabitacion {
         return estados;
     }
     
-    private String determinarEstado(Habitacion habitacion, LocalDate fecha) {
-        // Si horaSalida tiene valor, la habitación está OCUPADA hasta esa fecha
-        if (habitacion.getHoraSalida() != null) {
-            LocalDate fechaSalida = habitacion.getHoraSalida().toLocalDate();
-            if (!fecha.isAfter(fechaSalida)) {
-                return "OCUPADA";
+    private String determinarEstado(Habitacion habitacion, LocalDate fecha, List<Reserva> reservas) {
+        // Verificar si hay una reserva activa para esta habitación en esta fecha
+        if (reservas != null && !reservas.isEmpty()) {
+            for (Reserva reserva : reservas) {
+                // Verificar si esta habitación está en la reserva
+                if (reserva.getHabitaciones().contains(habitacion)) {
+                    // Verificar si la fecha está dentro del rango de la reserva
+                    if (!fecha.isBefore(reserva.getFechaInicio()) && !fecha.isAfter(reserva.getFechaFin())) {
+                        // Si el huésped ya hizo check-in, está OCUPADA
+                        if (reserva.getCheckedIn() != null && reserva.getCheckedIn()) {
+                            return "OCUPADA";
+                        }
+                        // Si no hizo check-in, está RESERVADA
+                        return "RESERVADA";
+                    }
+                }
             }
         }
         
-        // Si estado es false (y no está ocupada), está en MANTENIMIENTO
-        if (!habitacion.getEstado()) {
-            return "MANTENIMIENTO";
-        }
-        
-        // TODO: Consultar tabla Reserva para verificar si está RESERVADA en esta fecha
-        // Por ahora, si no está ocupada ni en mantenimiento, está disponible
-        
-        return "DISPONIBLE";
+        // Si no hay reserva activa, retornar el estado base de la habitación
+        return habitacion.getEstado().name();
     }
 }
 
