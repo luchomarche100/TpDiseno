@@ -25,6 +25,11 @@ public class ViewController {
     public String mostrarBuscar() {
         return "buscar";
     }
+
+    @GetMapping("/huespedes/modificar")
+    public String mostrarModificarHuesped() {
+        return "modificar"; // buscará modificar.html en el mismo lugar que 'buscar'
+    }
     
 
     @GetMapping("/habitaciones/estado")
