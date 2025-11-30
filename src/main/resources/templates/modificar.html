@@ -11,25 +11,121 @@
         h1 {
             margin-bottom: 20px;
         }
-        .campo {
-            margin-bottom: 8px;
+        form {
+            max-width: 600px;
         }
-        .campo span.label {
+        .campo {
+            margin-bottom: 12px;
+            display: flex;
+            flex-direction: column;
+        }
+        label {
             font-weight: bold;
+            margin-bottom: 4px;
+        }
+        input, select {
+            padding: 6px;
+            font-size: 14px;
+        }
+        .botones {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        .botones button {
+            padding: 8px 16px;
+            font-size: 14px;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
 
     <h1>Modificar huésped</h1>
+    <p>Revise y modifique los datos del huésped. Luego seleccione la acción deseada.</p>
 
-    <p>En este primer paso solo mostramos los datos del huésped a modificar.</p>
+    <form id="form-modificar-huesped">
+        <!-- ID normalmente no se modifica -->
 
-    <div id="datos-huesped">
-        <!-- modificar.js va a completar esto -->
-    </div>
+        <div class="campo">
+            <label for="nombres">Nombres</label>
+            <input type="text" id="nombres" name="nombres">
+        </div>
 
-    <!-- Enlazar el JS -->
+        <div class="campo">
+            <label for="apellido">Apellido</label>
+            <input type="text" id="apellido" name="apellido">
+        </div>
+
+        <div class="campo">
+            <label for="tipoDocumento">Tipo de documento</label>
+            <select id="tipoDocumento" name="tipoDocumento">
+                <option value="">-- Seleccione --</option>
+                <option value="DNI">DNI</option>
+                <option value="LE">LE</option>
+                <option value="LC">LC</option>
+                <option value="PASAPORTE">PASAPORTE</option>
+                <option value="OTRO">OTRO</option>
+            </select>
+        </div>
+
+        <div class="campo">
+            <label for="nroDocumento">Número de documento</label>
+            <input type="text" id="nroDocumento" name="nroDocumento">
+        </div>
+
+        <div class="campo">
+            <label for="posIVA">Posición frente al IVA</label>
+            <select id="posIVA" name="posIVA">
+                <option value="">-- Seleccione --</option>
+                <option value="Responsable_Inscripto">Responsable Inscripto</option>
+                <option value="Monotributista">Monotributista</option>
+                <option value="Exento">Exento</option>
+                <option value="Consumidor_Final">Consumidor Final</option>
+                <option value="No_Responsable">No Responsable</option>
+                <option value="OTRO">OTRO</option>
+            </select>
+        </div>
+
+        <div class="campo">
+            <label for="fechaDeNacimiento">Fecha de nacimiento</label>
+            <!-- Podés cambiar a type="date" si el formato que te llega es compatible -->
+            <input type="text" id="fechaDeNacimiento" name="fechaDeNacimiento">
+        </div>
+
+        <div class="campo">
+            <label for="telefono">Teléfono</label>
+            <input type="text" id="telefono" name="telefono">
+        </div>
+
+        <div class="campo">
+            <label for="ocupacion">Ocupación</label>
+            <input type="text" id="ocupacion" name="ocupacion">
+        </div>
+
+        <div class="campo">
+            <label for="nacionalidad">Nacionalidad</label>
+            <input type="text" id="nacionalidad" name="nacionalidad">
+        </div>
+
+        <div class="campo">
+            <label for="CUIT">CUIT</label>
+            <input type="text" id="CUIT" name="CUIT">
+        </div>
+
+        <div class="campo">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email">
+        </div>
+
+        <div class="botones">
+            <!-- Los tres botones del CU: cancelar, borrar, guardar -->
+            <button type="button" id="btn-cancelar">Cancelar</button>
+            <button type="button" id="btn-borrar">Borrar</button>
+            <button type="submit" id="btn-guardar">Guardar cambios</button>
+        </div>
+    </form>
+
     <script src="/js/modificar.js"></script>
 
 </body>

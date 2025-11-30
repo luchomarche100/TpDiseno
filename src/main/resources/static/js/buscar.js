@@ -97,7 +97,6 @@ document.addEventListener("DOMContentLoaded", () => {
                         pais: h.direccion?.pais ?? ""
                     });
 
-                    // 👉 Va al GET del ViewController: /huespedes/modificar
                     window.location.href = "/huespedes/modificar?" + params.toString();
                 });
 

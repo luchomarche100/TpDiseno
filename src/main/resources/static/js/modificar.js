@@ -1,93 +1,59 @@
 document.addEventListener("DOMContentLoaded", () => {
-
-    const contenedor = document.getElementById("datos-huesped");
-
-    // Leer parámetros de la URL (query string)
+    // Leemos los parámetros de la URL ?id=...&nombres=... etc.
     const params = new URLSearchParams(window.location.search);
+    const get = (nombre) => params.get(nombre) || "";
 
-    // Armar un objeto "huesped" con los campos del HuespedDTO
-    const huesped = {
-        id: params.get("id"),
-        nombres: params.get("nombres"),
-        apellido: params.get("apellido"),
-        nroDocumento: params.get("nroDocumento"),
-        posIVA: params.get("posIVA"),
-        fechaDeNacimiento: params.get("fechaDeNacimiento"),
-        telefono: params.get("telefono"),
-        ocupacion: params.get("ocupacion"),
-        nacionalidad: params.get("nacionalidad"),
-        CUIT: params.get("CUIT"),
-        email: params.get("email"),
-        tipoDocumento: params.get("tipoDocumento"),
-        codigoPostal: params.get("codigoPostal"),
-        calle: params.get("calle"),
-        nroCalle: params.get("nroCalle"),
-        piso: params.get("piso"),
-        nroDepartamento: params.get("nroDepartamento"),
-        ciudad: params.get("ciudad"),
-        localidad: params.get("localidad"),
-        provincia: params.get("provincia"),
-        pais: params.get("pais")
-    };
+    // Rellenar campos del formulario
+    const id = document.getElementById("id");
+    if (id) id.value = get("id");
 
-    // Mostrar campo por campo
-    contenedor.innerHTML = `
-        <div class="campo">
-            <span class="label">ID:</span> ${huesped.id ?? ""}
-        </div>
-        <div class="campo">
-            <span class="label">Nombres:</span> ${huesped.nombres ?? ""}
-        </div>
-        <div class="campo">
-            <span class="label">Apellido:</span> ${huesped.apellido ?? ""}
-        </div>
-        <div class="campo">
-            <span class="label">Tipo documento:</span> ${huesped.tipoDocumento ?? ""}
-        </div>
-        <div class="campo">
-            <span class="label">Número documento:</span> ${huesped.nroDocumento ?? ""}
-        </div>
-        <div class="campo">
-            <span class="label">Posición IVA:</span> ${huesped.posIVA ?? ""}
-        </div>
-        <div class="campo">
-            <span class="label">Fecha de nacimiento:</span> ${huesped.fechaDeNacimiento ?? ""}
-        </div>
-        <div class="campo">
-            <span class="label">Teléfono:</span> ${huesped.telefono ?? ""}
-        </div>
-        <div class="campo">
-            <span class="label">Ocupación:</span> ${huesped.ocupacion ?? ""}
-        </div>
-        <div class="campo">
-            <span class="label">Nacionalidad:</span> ${huesped.nacionalidad ?? ""}
-        </div>
-        <div class="campo">
-            <span class="label">CUIT:</span> ${huesped.CUIT ?? ""}
-        </div>
-        <div class="campo">
-            <span class="label">Email:</span> ${huesped.email ?? ""}
-        </div>
-        <div class="campo">
-            <span class="label">Calle:</span> ${huesped.calle ?? ""}
-        </div>
-        <div class="campo">
-            <span class="label">Número calle:</span> ${huesped.nroCalle ?? ""}
-        </div>
-        <div class="campo">
-            <span class="label">Piso:</span> ${huesped.piso ?? ""}
-        </div>
-        <div class="campo">
-            <span class="label">Número departamento:</span> ${huesped.nroDepartamento ?? ""}
-        </div>
-        <div class="campo">
-            <span class="label">Localidad:</span> ${huesped.localidad ?? ""}
-        </div>
-        <div class="campo">
-            <span class="label">Provincia:</span> ${huesped.provincia ?? ""}
-        </div>
-        <div class="campo">
-            <span class="label">País:</span> ${huesped.pais ?? ""}
-        </div>
-    `;
+    const nombres = document.getElementById("nombres");
+    if (nombres) nombres.value = get("nombres");
+
+    const apellido = document.getElementById("apellido");
+    if (apellido) apellido.value = get("apellido");
+
+    const nroDocumento = document.getElementById("nroDocumento");
+    if (nroDocumento) nroDocumento.value = get("nroDocumento");
+
+    // POSICIÓN FRENTE AL IVA (select)
+    const posIVASelect = document.getElementById("posIVA");
+    if (posIVASelect) {
+        const posIVAParam = get("posIVA"); // viene de la URL
+        if (posIVAParam) {
+            posIVASelect.value = posIVAParam;
+        }
+    }
+
+    const fechaDeNacimiento = document.getElementById("fechaDeNacimiento");
+    if (fechaDeNacimiento) fechaDeNacimiento.value = get("fechaDeNacimiento");
+
+    const telefono = document.getElementById("telefono");
+    if (telefono) telefono.value = get("telefono");
+
+    const ocupacion = document.getElementById("ocupacion");
+    if (ocupacion) ocupacion.value = get("ocupacion");
+
+    const nacionalidad = document.getElementById("nacionalidad");
+    if (nacionalidad) nacionalidad.value = get("nacionalidad");
+
+    const cuit = document.getElementById("CUIT");
+    if (cuit) cuit.value = get("CUIT");
+
+    const email = document.getElementById("email");
+    if (email) email.value = get("email");
+
+    // TIPO DE DOCUMENTO (select con DNI, LE, LC, PASAPORTE, OTRO)
+    const tipoDocumentoSelect = document.getElementById("tipoDocumento");
+    if (tipoDocumentoSelect) {
+        const tipoDocParam = get("tipoDocumento"); // viene de la URL
+        if (tipoDocParam) {
+            tipoDocumentoSelect.value = tipoDocParam;
+        }
+    }
+
+    // (Opcional) aquí podes enganchar eventos de los botones si querés:
+    // const btnCancelar = document.getElementById("btn-cancelar");
+    // const btnBorrar = document.getElementById("btn-borrar");
+    // const btnGuardar = document.getElementById("btn-guardar");
 });
