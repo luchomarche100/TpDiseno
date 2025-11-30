@@ -1,5 +1,8 @@
 package com.diseno.tpDiseno.model;
 
+import java.time.LocalTime;
+
+
 import com.diseno.tpDiseno.util.EstadoHabitacionEnum;
 import com.diseno.tpDiseno.util.TipoDeHabitacionEnum;
 
@@ -36,5 +39,7 @@ public class Habitacion {
     private Float valorPorNoche;
 
     private String descripcion;
+
+    private LocalTime horaSalida;
 
 }

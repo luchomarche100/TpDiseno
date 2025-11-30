@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Reservar Habitación</title>
+    <link rel="stylesheet" href="/css/reservar.css" />
+  </head>
+  <body>
+    <div class="page-container">
+      <h1 class="page-title">Reservar Habitación</h1>
+
+      <div class="card">
+        <!-- INSTRUCCIONES -->
+        <div class="instrucciones">
+          <strong>Instrucciones:</strong> Seleccione el rango de fechas, busque las habitaciones disponibles 
+          y haga clic y arrastre sobre las celdas de la grilla para seleccionar el período de reserva para cada habitación.
+        </div>
+
+        <!-- FILTROS -->
+        <div class="filters-row">
+          <div class="field">
+            <label for="fechaDesde">Desde fecha (dd/mm/aaaa):</label>
+            <input type="text" id="fechaDesde" placeholder="dd/mm/aaaa" />
+          </div>
+          <div class="field">
+            <label for="fechaHasta">Hasta fecha (dd/mm/aaaa):</label>
+            <input type="text" id="fechaHasta" placeholder="dd/mm/aaaa" />
+          </div>
+          <div class="buttons-row">
+            <button class="btn btn-primary" id="btnBuscar">Buscar</button>
+            <button class="btn btn-secondary" id="btnLimpiar">Limpiar</button>
+          </div>
+        </div>
+
+        <div id="error" class="error-message"></div>
+        <div id="success" class="success-message"></div>
+
+        <!-- LEYENDA -->
+        <div class="legend">
+          <div class="legend-item">
+            <span class="legend-color color-disponible"></span> Disponible
+          </div>
+          <div class="legend-item">
+            <span class="legend-color color-reservada"></span> Reservada
+          </div>
+          <div class="legend-item">
+            <span class="legend-color color-ocupada"></span> Ocupada
+          </div>
+          <div class="legend-item">
+            <span class="legend-color color-mantenimiento"></span> Mantenimiento
+          </div>
+          <div class="legend-item">
+            <span class="legend-color color-seleccionada"></span> Seleccionada
+          </div>
+        </div>
+
+        <!-- GRILLA -->
+        <div class="grid-container" id="gridContainer">
+          <!-- acá se inyecta la tabla por JS -->
+        </div>
+
+        <!-- RESUMEN DE RESERVA -->
+        <div class="resumen-container" id="resumenContainer">
+          <div id="resumenContent"></div>
+        </div>
+
+        <!-- FORMULARIO DE HUÉSPED -->
+        <div class="formulario-huesped" id="formularioHuesped">
+          <div class="form-title">Reserva a nombre de:</div>
+          
+          <!-- BUSCADOR DE HUÉSPED -->
+          <div class="buscador-huesped">
+            <div class="buscador-title">¿Huésped registrado?</div>
+            <div class="buscador-row">
+              <div class="field">
+                <label for="tipoDocBuscar">Tipo Documento</label>
+                <select id="tipoDocBuscar">
+                  <option value="">Seleccione...</option>
+                  <option value="DNI">DNI</option>
+                  <option value="PASAPORTE">Pasaporte</option>
+                  <option value="LIBRETA_CIVICA">Libreta Cívica</option>
+                  <option value="LIBRETA_ENROLAMIENTO">Libreta Enrolamiento</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="nroDocBuscar">Nro. Documento</label>
+                <input type="text" id="nroDocBuscar" placeholder="Ej: 12345678" />
+              </div>
+              <div class="buttons-row">
+                <button class="btn btn-primary" id="btnBuscarHuesped">Buscar Huésped</button>
+              </div>
+            </div>
+            <div id="errorBusqueda" class="error-message"></div>
+            <div id="successBusqueda" class="success-message"></div>
+          </div>
+
+          <div class="separador">O ingrese los datos manualmente:</div>
+          
+          <div class="form-grid">
+            <div class="form-field">
+              <label for="apellidoHuesped">Apellido *</label>
+              <input type="text" id="apellidoHuesped" placeholder="Apellido" />
+            </div>
+            
+            <div class="form-field">
+              <label for="nombreHuesped">Nombre *</label>
+              <input type="text" id="nombreHuesped" placeholder="Nombre" />
+            </div>
+            
+            <div class="form-field">
+              <label for="telefonoHuesped">Teléfono *</label>
+              <input type="text" id="telefonoHuesped" placeholder="Ej: 3512345678" />
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button class="btn btn-success" id="btnConfirmarDatos">Confirmar Reserva</button>
+            <button class="btn btn-secondary" id="btnCancelarDatos">Cancelar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL DE ÉXITO -->
+    <div class="modal" id="modalExito">
+      <div class="modal-content">
+        <div class="modal-title">✓ Reserva Exitosa</div>
+        <div class="modal-body" id="modalExitoBody">
+          <!-- Se llena dinámicamente -->
+        </div>
+        <div class="modal-actions">
+          <button class="btn btn-primary" id="btnCerrarModal">Aceptar</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="/js/utils-fecha.js"></script>
+    <script src="/js/reservar.js"></script>
+  </body>
+</html>

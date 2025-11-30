@@ -1,0 +1,465 @@
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: linear-gradient(180deg, #234c7a, #111827);
+  color: #f9fafb;
+}
+
+.page-container {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 0 24px 40px;
+}
+
+.page-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 24px;
+}
+
+.card {
+  background: #111827;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+  margin-bottom: 24px;
+}
+
+.filters-row {
+  display: flex;
+  gap: 24px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 200px;
+}
+
+.field label {
+  font-size: 14px;
+}
+
+.field input[type="text"] {
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #4b5563;
+  background: #0f172a;
+  color: #f9fafb;
+  font-family: inherit;
+}
+
+.field input[type="text"]:focus {
+  outline: none;
+  border-color: #2563eb;
+}
+
+.buttons-row {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.btn {
+  border-radius: 999px;
+  padding: 8px 18px;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-primary {
+  background: #2563eb;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #1d4ed8;
+}
+
+.btn-secondary {
+  background: #374151;
+  color: #e5e7eb;
+}
+
+.btn-secondary:hover {
+  background: #4b5563;
+}
+
+.btn-success {
+  background: #22c55e;
+  color: white;
+}
+
+.btn-success:hover {
+  background: #16a34a;
+}
+
+.btn-danger {
+  background: #ef4444;
+  color: white;
+}
+
+.btn-danger:hover {
+  background: #dc2626;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.error-message {
+  margin-top: 8px;
+  color: #fca5a5;
+  font-size: 14px;
+}
+
+.success-message {
+  margin-top: 8px;
+  color: #86efac;
+  font-size: 14px;
+}
+
+.legend {
+  display: flex;
+  gap: 16px;
+  margin: 16px 0 8px;
+  font-size: 13px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legend-color {
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  border: 1px solid #374151;
+}
+
+.color-disponible { background: #22c55e; }
+.color-ocupada { background: #ef4444; }
+.color-reservada { background: #a855f7; }
+.color-mantenimiento { background: #6b7280; }
+.color-seleccionada { background: #3b82f6; }
+
+/* Grilla de habitaciones */
+.grid-container {
+  margin-top: 8px;
+  border-radius: 8px;
+  overflow: auto;
+  border: 1px solid #374151;
+  background: #020617;
+  max-height: 560px;
+}
+
+table.estado-grid {
+  border-collapse: collapse;
+  min-width: 100%;
+  font-size: 13px;
+}
+
+.estado-grid th,
+.estado-grid td {
+  border: 1px solid #1f2937;
+  text-align: center;
+  padding: 4px;
+  white-space: nowrap;
+}
+
+.estado-grid thead {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: #020617;
+}
+
+.tipo-header {
+  font-weight: 600;
+  font-size: 11px;
+  background: #0f172a;
+  color: #e5e7eb;
+}
+
+.fecha-col,
+.fecha-header {
+  position: sticky;
+  left: 0;
+  background: #020617;
+  z-index: 3;
+  font-weight: 500;
+  font-size: 15px;
+  padding: 1px 6px;
+  width: 70px;
+}
+
+.fecha-col {
+  z-index: 1;
+  text-align: left;
+}
+
+.cell-estado {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+.cell-estado:hover:not(.cell-ocupada):not(.cell-mantenimiento):not(.cell-reservada) {
+  transform: scale(1.1);
+}
+
+.cell-disponible { background: #22c55e; }
+.cell-ocupada { 
+  background: #ef4444;
+  cursor: not-allowed;
+}
+.cell-reservada { 
+  background: #a855f7;
+  cursor: not-allowed;
+}
+.cell-mantenimiento { 
+  background: #6b7280;
+  cursor: not-allowed;
+}
+.cell-seleccionada { 
+  background: #3b82f6 !important;
+  border: 2px solid #60a5fa !important;
+}
+
+/* Resumen de reserva */
+.resumen-container {
+  display: none;
+  background: #0f172a;
+  border-radius: 8px;
+  padding: 16px;
+  margin-top: 16px;
+}
+
+.resumen-container.visible {
+  display: block;
+}
+
+.resumen-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.resumen-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #1f2937;
+}
+
+.resumen-item:last-child {
+  border-bottom: none;
+}
+
+.resumen-label {
+  color: #9ca3af;
+}
+
+.resumen-value {
+  font-weight: 500;
+}
+
+/* Formulario de huésped */
+.formulario-huesped {
+  display: none;
+  background: #0f172a;
+  border-radius: 8px;
+  padding: 20px;
+  margin-top: 16px;
+}
+
+.formulario-huesped.visible {
+  display: block;
+}
+
+.form-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+/* Buscador de huésped */
+.buscador-huesped {
+  padding: 15px;
+  background: #1e293b;
+  border-radius: 6px;
+  margin-bottom: 20px;
+}
+
+.buscador-title {
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #e5e7eb;
+}
+
+.buscador-row {
+  display: flex;
+  gap: 15px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+
+.buscador-row .field {
+  flex: 1;
+  min-width: 200px;
+}
+
+.buscador-row select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #4b5563;
+  border-radius: 6px;
+  background: #020617;
+  color: #f9fafb;
+  font-size: 14px;
+}
+
+.buscador-row select:focus {
+  outline: none;
+  border-color: #3b82f6;
+}
+
+.separador {
+  text-align: center;
+  font-style: italic;
+  color: #94a3b8;
+  margin: 20px 0;
+  position: relative;
+}
+
+.separador::before,
+.separador::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 40%;
+  height: 1px;
+  background: #334155;
+}
+
+.separador::before {
+  left: 0;
+}
+
+.separador::after {
+  right: 0;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-field label {
+  font-size: 14px;
+  color: #e5e7eb;
+}
+
+.form-field input {
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1px solid #4b5563;
+  background: #020617;
+  color: #f9fafb;
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.form-field input:focus {
+  outline: none;
+  border-color: #2563eb;
+}
+
+.form-field.error input {
+  border-color: #ef4444;
+}
+
+.form-field .error-text {
+  color: #fca5a5;
+  font-size: 12px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+/* Modal de confirmación */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal.visible {
+  display: flex;
+}
+
+.modal-content {
+  background: #111827;
+  border-radius: 16px;
+  padding: 32px;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+}
+
+.modal-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.modal-body {
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.instrucciones {
+  background: #0f172a;
+  border-left: 3px solid #2563eb;
+  padding: 12px;
+  margin-bottom: 16px;
+  border-radius: 4px;
+  font-size: 13px;
+  color: #9ca3af;
+}

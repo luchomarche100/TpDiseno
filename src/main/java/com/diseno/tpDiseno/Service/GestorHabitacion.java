@@ -11,9 +11,12 @@ import com.diseno.tpDiseno.Exception.ReglaNegocioException;
 import com.diseno.tpDiseno.dto.EstadoDiaDTO;
 import com.diseno.tpDiseno.dto.HabitacionEstadoDTO;
 import com.diseno.tpDiseno.dto.request.MostrarEstadoRequest;
+import com.diseno.tpDiseno.dto.request.ReservarHabitacionRequest;
 import com.diseno.tpDiseno.dto.response.MostrarEstadoResponse;
+import com.diseno.tpDiseno.dto.response.ReservaHuespedResponse;
 import com.diseno.tpDiseno.model.Habitacion;
 import com.diseno.tpDiseno.model.Reserva;
+import com.diseno.tpDiseno.util.ErrorCampo;
 
 import lombok.Data;
 
@@ -23,7 +26,51 @@ public class GestorHabitacion {
     private final HabitacionDAO habitacionDao;
     private final Validador validarHabitaciones;
     private final GestorReserva gestorReserva;
-    
+
+
+
+    public ReservaHuespedResponse reservarHabitacion(ReservarHabitacionRequest request) {
+       validarHabitaciones.validarReserva(request);
+        LocalDate fechaInicio =request.getFechaInicio(); 
+        LocalDate fechaFin = request.getFechaFin();
+        List<Habitacion> habitaciones = habitacionDao.findAllById(request.getHabitacionesIds());
+        if(habitaciones.size() != request.getHabitacionesIds().size()) {
+           List<ErrorCampo> errores = List.of(
+                new ErrorCampo()
+            );
+            throw new ReglaNegocioException(
+                "HABITACION_INEXISTENTE",
+                "Se seleccionaron habitaciones inexistentes",
+                errores
+            );
+        }
+        List<Reserva> reservasExistentes = gestorReserva.obtenerReservaPorFecha(fechaInicio, fechaFin);
+        validarHabitaciones.validarDisponibilidad(habitaciones, reservasExistentes);
+
+        Reserva reserva = gestorReserva.crearReserva(
+            fechaInicio, 
+            fechaFin, 
+            habitaciones,
+            request.getApellido(),
+            request.getNombre(),
+            request.getTelefono()
+        );
+        
+        ReservaHuespedResponse response = new ReservaHuespedResponse();
+        response.setIdReserva(reserva.getId());
+        response.setMensaje("Reserva creada exitosamente");
+        response.setApellido(reserva.getApellido());
+        response.setNombre(reserva.getNombre());
+        response.setTelefono(reserva.getTelefono());
+        response.setHabitacionesIds(request.getHabitacionesIds());
+        response.setFechaInicio(fechaInicio);
+        response.setFechaFin(fechaFin);
+        
+        return response;
+    }
+
+
+
     public MostrarEstadoResponse mostrarEstado(MostrarEstadoRequest request) {
       
         Boolean esValido = validarHabitaciones.validarFechaDesde(request);
