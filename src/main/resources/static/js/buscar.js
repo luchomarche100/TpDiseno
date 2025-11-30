@@ -86,7 +86,15 @@ document.addEventListener("DOMContentLoaded", () => {
                         nacionalidad: h.nacionalidad ?? "",
                         CUIT: h.CUIT ?? h.cuit ?? "",
                         email: h.email ?? "",
-                        tipoDocumento: h.tipoDocumento ?? ""
+                        tipoDocumento: h.tipoDocumento ?? "",
+                        codigoPostal: h.direccion?.codigoPostal ?? "",
+                        calle: h.direccion?.calle ?? "",
+                        nroCalle: h.direccion?.nroCalle ?? "",
+                        piso: h.direccion?.piso ?? "",
+                        nroDepartamento: h.direccion?.nroDepartamento ?? "",
+                        localidad: h.direccion?.localidad ?? "",
+                        provincia: h.direccion?.provincia ?? "",
+                        pais: h.direccion?.pais ?? ""
                     });
 
                     // 👉 Va al GET del ViewController: /huespedes/modificar

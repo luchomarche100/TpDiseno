@@ -18,8 +18,16 @@ document.addEventListener("DOMContentLoaded", () => {
         nacionalidad: params.get("nacionalidad"),
         CUIT: params.get("CUIT"),
         email: params.get("email"),
-        tipoDocumento: params.get("tipoDocumento")
-        // Si después querés, podés agregar direccion.calle, direccion.numero, etc.
+        tipoDocumento: params.get("tipoDocumento"),
+        codigoPostal: params.get("codigoPostal"),
+        calle: params.get("calle"),
+        nroCalle: params.get("nroCalle"),
+        piso: params.get("piso"),
+        nroDepartamento: params.get("nroDepartamento"),
+        ciudad: params.get("ciudad"),
+        localidad: params.get("localidad"),
+        provincia: params.get("provincia"),
+        pais: params.get("pais")
     };
 
     // Mostrar campo por campo
@@ -59,6 +67,27 @@ document.addEventListener("DOMContentLoaded", () => {
         </div>
         <div class="campo">
             <span class="label">Email:</span> ${huesped.email ?? ""}
+        </div>
+        <div class="campo">
+            <span class="label">Calle:</span> ${huesped.calle ?? ""}
+        </div>
+        <div class="campo">
+            <span class="label">Número calle:</span> ${huesped.nroCalle ?? ""}
+        </div>
+        <div class="campo">
+            <span class="label">Piso:</span> ${huesped.piso ?? ""}
+        </div>
+        <div class="campo">
+            <span class="label">Número departamento:</span> ${huesped.nroDepartamento ?? ""}
+        </div>
+        <div class="campo">
+            <span class="label">Localidad:</span> ${huesped.localidad ?? ""}
+        </div>
+        <div class="campo">
+            <span class="label">Provincia:</span> ${huesped.provincia ?? ""}
+        </div>
+        <div class="campo">
+            <span class="label">País:</span> ${huesped.pais ?? ""}
         </div>
     `;
 });
