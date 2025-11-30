@@ -53,16 +53,48 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             // Dibujar cada huésped
+            divResultados.innerHTML = ""; // limpiar resultados anteriores
+
             lista.forEach(h => {
-                const tarjeta = `
-                    <div style="border: 1px solid #ccc; padding: 10px; margin: 10px 0;">
-                        <p><strong>Nombre:</strong> ${h.nombres ?? ""}</p>
-                        <p><strong>Apellido:</strong> ${h.apellido ?? ""}</p>
-                        <p><strong>Tipo Doc:</strong> ${h.tipoDocumento ?? ""}</p>
-                        <p><strong>Nro Doc:</strong> ${h.nroDocumento ?? ""}</p>
-                    </div>
+                const tarjeta = document.createElement("div");
+                tarjeta.style.border = "1px solid #ccc";
+                tarjeta.style.padding = "10px";
+                tarjeta.style.margin = "10px 0";
+
+                tarjeta.innerHTML = `
+                    <p><strong>Nombre:</strong> ${h.nombres ?? ""}</p>
+                    <p><strong>Apellido:</strong> ${h.apellido ?? ""}</p>
+                    <p><strong>Tipo Doc:</strong> ${h.tipoDocumento ?? ""}</p>
+                    <p><strong>Nro Doc:</strong> ${h.nroDocumento ?? ""}</p>
                 `;
-                divResultados.innerHTML += tarjeta;
+
+                // 🔵 Botón "Modificar" que REDIRIGE con todos los datos por query string
+                const botonModificar = document.createElement("button");
+                botonModificar.type = "button";
+                botonModificar.textContent = "Modificar";
+
+                botonModificar.addEventListener("click", () => {
+                    const params = new URLSearchParams({
+                        id: h.id ?? "",
+                        nombres: h.nombres ?? "",
+                        apellido: h.apellido ?? "",
+                        nroDocumento: h.nroDocumento ?? "",
+                        posIVA: h.posIVA ?? "",
+                        fechaDeNacimiento: h.fechaDeNacimiento ?? "",
+                        telefono: h.telefono ?? "",
+                        ocupacion: h.ocupacion ?? "",
+                        nacionalidad: h.nacionalidad ?? "",
+                        CUIT: h.CUIT ?? h.cuit ?? "",
+                        email: h.email ?? "",
+                        tipoDocumento: h.tipoDocumento ?? ""
+                    });
+
+                    // 👉 Va al GET del ViewController: /huespedes/modificar
+                    window.location.href = "/huespedes/modificar?" + params.toString();
+                });
+
+                tarjeta.appendChild(botonModificar);
+                divResultados.appendChild(tarjeta);
             });
 
         } catch (error) {
