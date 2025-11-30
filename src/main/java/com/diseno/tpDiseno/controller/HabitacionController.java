@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.diseno.tpDiseno.Service.GestorHabitacion;
 import com.diseno.tpDiseno.dto.request.MostrarEstadoRequest;
+import com.diseno.tpDiseno.dto.request.ReservarHabitacionRequest;
 import com.diseno.tpDiseno.dto.response.MostrarEstadoResponse;
+import com.diseno.tpDiseno.dto.response.ReservaHuespedResponse;
 
 @RestController
 @RequestMapping("/api/habitaciones")
@@ -27,5 +29,10 @@ public class HabitacionController {
         return ResponseEntity.ok(response);
     }
 
+    @PostMapping("/reservar")
+    public ResponseEntity<ReservaHuespedResponse> reservarHabitacion(@RequestBody ReservarHabitacionRequest request) {
+        ReservaHuespedResponse response= gestorHabitacion.reservarHabitacion(request);
+        return ResponseEntity.ok(response);
+    }
 
 }

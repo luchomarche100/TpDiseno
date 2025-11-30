@@ -13,8 +13,7 @@ import com.diseno.tpDiseno.dto.request.BuscarHuespedRequest;
 import com.diseno.tpDiseno.dto.request.SolicitudHuespedRequest;
 import com.diseno.tpDiseno.dto.response.BuscarHuespedResponse;
 import com.diseno.tpDiseno.dto.response.DarAltaResponse;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 @RestController

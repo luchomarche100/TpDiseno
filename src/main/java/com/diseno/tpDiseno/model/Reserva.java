@@ -33,4 +33,14 @@ public class Reserva {
 
     @ManyToMany
     private List<Habitacion> habitaciones;
+    
+    // Datos del eventual huésped
+    @Column(nullable = false)
+    private String apellido;
+    
+    @Column(nullable = false)
+    private String nombre;
+    
+    @Column(nullable = false)
+    private String telefono;
 }

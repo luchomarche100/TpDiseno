@@ -11,7 +11,7 @@ import com.diseno.tpDiseno.model.Reserva;
 
 public interface ReservaDAO extends JpaRepository<Reserva, Long> {
 
-    @Query("SELECT r FROM Reserva r WHERE r.fechaInicio <= :fechaFin AND r.fechaFin >= :fechaInicio")
+    @Query("SELECT DISTINCT r FROM Reserva r LEFT JOIN FETCH r.habitaciones WHERE r.fechaInicio <= :fechaFin AND r.fechaFin >= :fechaInicio")
     List<Reserva> findAllByFechaBetween(@Param("fechaInicio") LocalDate fechaInicio, @Param("fechaFin") LocalDate fechaFin);
     
 }

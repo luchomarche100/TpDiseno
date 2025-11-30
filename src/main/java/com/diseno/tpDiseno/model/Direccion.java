@@ -23,9 +23,9 @@ public class Direccion {
     @Column(nullable = false)
     private Integer codigoPostal;
     @Column(nullable = false)
-    private String calle;
+    private String calle;//
     @Column(nullable = false)
-    private Integer nroCalle; 
+    private Integer nroCalle; ////
     @Column(nullable = false)
     private Integer piso;
     @Column(nullable = false)

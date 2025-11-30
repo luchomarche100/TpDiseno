@@ -2,7 +2,6 @@ package com.diseno.tpDiseno.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 @Controller
@@ -31,5 +30,10 @@ public class ViewController {
     @GetMapping("/habitaciones/estado")
     public String mostrarEstadoHabitaciones() {
         return "EstadoHabitacion";
+    }
+    
+    @GetMapping("/habitaciones/reservar")
+    public String mostrarReservarHabitacion() {
+        return "reservar";
     }
 }   
