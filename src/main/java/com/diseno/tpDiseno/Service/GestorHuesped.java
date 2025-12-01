@@ -193,6 +193,10 @@ public class GestorHuesped {
         return huespedDAO.findAllById(ids);
     }
 
+    public void guardarHuesped(Huesped huesped) {
+        huespedDAO.save(huesped);
+    }
+
     public HuespedDTO modificarHuesped(SolicitudHuespedRequest huesped) {
         Huesped huespedExistente = (huespedDAO.findById(huesped.getId())).orElseThrow(() -> 
         new ReglaNegocioException("HUESPED_NO_ENCONTRADO", "No se encontró un huésped con el ID proporcionado", null)

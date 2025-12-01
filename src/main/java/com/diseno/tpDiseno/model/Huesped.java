@@ -72,4 +72,7 @@ public class Huesped {
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<Factura> facturas;
+    
+    @Column(nullable = false)
+    private Boolean responsable = false;
 }

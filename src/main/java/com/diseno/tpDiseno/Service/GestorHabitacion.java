@@ -232,6 +232,10 @@ public class GestorHabitacion {
         reserva.setHuespedTitular(titular);
         reserva.setAcompanantes(acompanantes);
         
+        // Marcar al titular como responsable de esta reserva
+        titular.setResponsable(true);
+        gestorHuesped.guardarHuesped(titular);
+        
         // Guardar la reserva
         gestorReserva.guardarReserva(reserva);
 
