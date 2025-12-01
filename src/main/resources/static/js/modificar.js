@@ -152,4 +152,15 @@ document.addEventListener("DOMContentLoaded", () => {
                 alert("Ocurrió un error al comunicarse con el servidor.");
             }
         });
+
+    // --- BOTÓN CANCELAR: VOLVER A LA PANTALLA ANTERIOR ---
+    const btnCancelar = document.getElementById("btn-cancelar");
+    if (btnCancelar) {
+        btnCancelar.addEventListener("click", () => {
+            const confirmar = confirm("¿Desea cancelar la modificación del huésped?");
+            if (confirmar) {
+                window.history.back();
+            }
+        });
+    }
 });

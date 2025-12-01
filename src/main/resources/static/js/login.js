@@ -1,6 +1,7 @@
 const loginForm = document.getElementById('loginForm');
 
 loginForm.addEventListener('submit', async (event) => {
+    event.preventDefault(); // Evitar el submit por defecto del formulario
      
     // 2. Recopila las credenciales del formulario
     const username = document.getElementById('username').value;

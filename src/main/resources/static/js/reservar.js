@@ -555,6 +555,14 @@ function rechazarReserva() {
     limpiarSeleccionHabitacion(habitacion);
   });
   estadoApp.selecciones = {};
+  
+  // Resetear estado de selección de rango también
+  estadoApp.seleccionRango = {
+    activo: false,
+    habitacionId: null,
+    fechaInicio: null
+  };
+  
   ocultarResumenYFormulario();
   errorDiv.textContent = "";
   successDiv.textContent = "";
@@ -695,6 +703,7 @@ btnCerrarModal.addEventListener('click', () => {
 });
 
 btnCancelarDatos.addEventListener('click', () => {
+  // Solo ocultar el formulario y volver al resumen
   formularioHuesped.classList.remove('visible');
   limpiarFormulario();
 });
@@ -793,3 +802,10 @@ btnLimpiar.addEventListener("click", () => {
   ocultarResumenYFormulario();
   inputDesde.focus();
 });
+
+const btnVolver = document.getElementById('btnVolver');
+if (btnVolver) {
+  btnVolver.addEventListener('click', () => {
+    window.history.back();
+  });
+}

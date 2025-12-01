@@ -35,7 +35,6 @@ public class Reserva {
     @ManyToMany
     private List<Habitacion> habitaciones;
     
-    // Datos del eventual huésped (para reservas sin check-in)
     @Column(nullable = false)
     private String apellido;
     
@@ -44,8 +43,7 @@ public class Reserva {
     
     @Column(nullable = false)
     private String telefono;
-    
-    // Relaciones con huéspedes (para ocupaciones con check-in)
+
     @ManyToOne
     private Huesped huespedTitular;
     

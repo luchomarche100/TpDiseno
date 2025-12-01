@@ -20,8 +20,6 @@ const paso3Card = document.getElementById("paso3Card");
 const btnBuscarHuesped = document.getElementById("btnBuscarHuesped");
 const btnConfirmarOcupacion = document.getElementById("btnConfirmarOcupacion");
 const btnVolverPaso1 = document.getElementById("btnVolverPaso1");
-const btnNuevaOcupacion = document.getElementById("btnNuevaOcupacion");
-const btnVolverInicio = document.getElementById("btnVolverInicio");
 
 const buscarNombre = document.getElementById("buscarNombre");
 const buscarApellido = document.getElementById("buscarApellido");
@@ -483,8 +481,9 @@ async function buscarInfoReservaYConfirmar(habitacionId, fechasReservadas, celda
       mensaje += `\n`;
     }
     
-    mensaje += `¿Desea OCUPAR estas fechas de todas formas?\n`;
-    mensaje += `(Esto reemplazará/modificará la reserva existente)`;
+    mensaje += `\n¿Desea OCUPAR IGUAL estas fechas?\n`;
+    mensaje += `(Esto reemplazará la reserva existente)\n\n`;
+    mensaje += `Presione ACEPTAR para OCUPAR IGUAL o CANCELAR para VOLVER`;
     
     const confirmar = confirm(mensaje);
     
@@ -800,46 +799,74 @@ btnVolverPaso1.addEventListener("click", () => {
   errorBusqueda.textContent = "";
 });
 
-btnNuevaOcupacion.addEventListener("click", () => {
-  // Reset completo
-  estadoApp = {
-    fechaDesde: null,
-    fechaHasta: null,
-    habitacionesSeleccionadas: new Map(),
-    habitacionesData: [],
-    huespedTitular: null,
-    acompanantes: [],
-    seleccionRango: {
+// Botón "Seguir Cargando" - vuelve al paso 2 para cargar más huéspedes
+const btnSeguirCargando = document.getElementById("btnSeguirCargando");
+if (btnSeguirCargando) {
+  btnSeguirCargando.addEventListener("click", () => {
+    paso3Card.style.display = "none";
+    paso2Card.style.display = "block";
+    
+    // Mantener las fechas y habitaciones, limpiar huéspedes
+    estadoApp.huespedTitular = null;
+    estadoApp.acompanantes = [];
+    titularInfo.textContent = "No seleccionado";
+    listaAcompanantes.innerHTML = "<span class='no-acompanantes'>Ninguno seleccionado</span>";
+    
+    // Limpiar búsqueda
+    buscarNombre.value = "";
+    buscarApellido.value = "";
+    buscarTipoDoc.value = "";
+    buscarNumDoc.value = "";
+    resultadosBusqueda.innerHTML = "";
+    resultadosBusqueda.style.display = "none";
+    errorBusqueda.textContent = "";
+  });
+}
+
+// Botón "Cargar Otra Habitación" - vuelve al paso 1 (mostrar estado)
+const btnCargarOtraHabitacion = document.getElementById("btnCargarOtraHabitacion");
+if (btnCargarOtraHabitacion) {
+  btnCargarOtraHabitacion.addEventListener("click", () => {
+    paso3Card.style.display = "none";
+    paso1Card.style.display = "block";
+    
+    // Mantener las fechas pero limpiar selecciones
+    gridContainer.innerHTML = "";
+    gridContainer.style.display = "none";
+    legendContainer.style.display = "none";
+    btnContinuarContainer.style.display = "none";
+    instruccionesSeleccion.style.display = "none";
+    btnCancelarSeleccion.style.display = "none";
+    
+    estadoApp.habitacionesSeleccionadas.clear();
+    estadoApp.huespedTitular = null;
+    estadoApp.acompanantes = [];
+    estadoApp.seleccionRango = {
       activo: false,
       habitacionId: null,
       fechaInicio: null,
       celdas: []
+    };
+    
+    // Volver a mostrar el estado con las fechas actuales
+    if (estadoApp.fechaDesde && estadoApp.fechaHasta) {
+      mostrarEstadoHabitaciones();
     }
-  };
+  });
+}
 
-  inputDesde.value = "";
-  inputHasta.value = "";
-  errorFechas.textContent = "";
-  gridContainer.innerHTML = "";
-  gridContainer.style.display = "none";
-  legendContainer.style.display = "none";
-  btnContinuarContainer.style.display = "none";
+// Botón "Salir" - vuelve a inicio
+const btnSalir = document.getElementById("btnSalir");
+if (btnSalir) {
+  btnSalir.addEventListener("click", () => {
+    window.location.href = "/inicio";
+  });
+}
 
-  buscarNombre.value = "";
-  buscarApellido.value = "";
-  buscarTipoDoc.value = "";
-  buscarNumDoc.value = "";
-  resultadosBusqueda.innerHTML = "";
-  resultadosBusqueda.style.display = "none";
-  errorBusqueda.textContent = "";
-  
-  titularInfo.textContent = "No seleccionado";
-  listaAcompanantes.innerHTML = "<span class='no-acompanantes'>Ninguno seleccionado</span>";
-
-  paso3Card.style.display = "none";
-  paso1Card.style.display = "block";
-});
-
-btnVolverInicio.addEventListener("click", () => {
-  window.location.href = "/inicio";
-});
+// Botón Volver en Paso 1
+const btnVolverInicioPaso1 = document.getElementById("btnVolverInicioPaso1");
+if (btnVolverInicioPaso1) {
+  btnVolverInicioPaso1.addEventListener("click", () => {
+    window.history.back();
+  });
+}

@@ -116,4 +116,12 @@ document.addEventListener("DOMContentLoaded", () => {
             alert("Ocurrió un error al comunicarse con el servidor (ver consola).");
         }
     });
+
+    // Botón volver
+    const btnVolver = document.getElementById('btn-volver');
+    if (btnVolver) {
+        btnVolver.addEventListener('click', () => {
+            window.history.back();
+        });
+    }
 });
