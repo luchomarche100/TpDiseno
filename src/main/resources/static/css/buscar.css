@@ -1,0 +1,226 @@
+/* Reset básico */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    /* Fondo degradado similar a la maqueta */
+    background: linear-gradient(to bottom, #7893d0 0%, #556b9d 45%, #1b2638 100%);
+    min-height: 100vh;
+    padding: 30px 50px;
+    color: #ffffff;
+}
+
+/* Título y comentario superior */
+h1 {
+    font-size: 32px;
+    margin-bottom: 5px;
+}
+
+.comentario {
+    margin-bottom: 20px;
+    color: #e5e5e5;
+}
+
+/* Contenedor principal: formulario + resultados */
+.contenedor-principal {
+    display: flex;
+    gap: 40px;
+    align-items: flex-start;
+}
+
+/* Resultados ocultos al inicio */
+#resultados {
+    display: none;
+}
+
+/* Tarjeta del formulario */
+#form-buscar-huesped {
+    background-color: #ffffff;
+    color: #333333;
+    border-radius: 12px;
+    padding: 25px 30px 30px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+    width: 480px;          /* 🔵 más ancho */
+    margin-top: 20px;
+}
+
+/* Tarjeta de resultados (similar a la maqueta de la derecha) */
+#resultados {
+    background-color: #ffffff;
+    color: #333333;
+    border-radius: 12px;
+    padding: 20px 25px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+    width: 650px;          /* 🔵 más ancho */
+    min-height: 320px;     /* 🔵 más alto */
+    margin-top: 20px;
+    margin-left: 40px;
+}
+
+/* Grupos de campos */
+.form-group {
+    margin-bottom: 14px;
+}
+
+label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 4px;
+    font-size: 14px;
+}
+
+/* Inputs y selects */
+input[type="text"],
+select {
+    width: 100%;           /* 🔵 se estiran con el nuevo ancho del form */
+    padding: 9px 10px;     /* un poco más altos */
+    font-size: 14px;
+    border-radius: 4px;
+    border: 1px solid #c1c6d0;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+input[type="text"]:focus,
+select:focus {
+    border-color: #2e5fbf;
+    box-shadow: 0 0 0 2px rgba(46, 95, 191, 0.25);
+}
+
+/* Botón principal (Buscar) */
+button[type="submit"] {
+    margin-top: 18px;      /* 🔵 queda debajo del último campo */
+    padding: 9px 26px;
+    font-size: 15px;
+    cursor: pointer;
+    border-radius: 4px;
+    border: none;
+    background-color: #1d57c0; /* azul similar */
+    color: #ffffff;
+    font-weight: bold;
+    transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+}
+
+button[type="submit"]:hover {
+    background-color: #164693;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+    transform: translateY(-1px);
+}
+
+button[type="submit"]:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+/* Si luego en #resultados generás una tabla, que se parezca a la de la imagen */
+#resultados table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+#resultados th,
+#resultados td {
+    padding: 8px 6px;
+    text-align: left;
+}
+
+#resultados thead {
+    border-bottom: 1px solid #d0d4dd;
+}
+
+#resultados tbody tr:nth-child(even) {
+    background-color: #f5f7fb;
+}
+
+#resultados tbody tr:hover {
+    background-color: #e6ecf7;
+}
+
+/* Botón seleccionar dentro de la tabla (si lo usás) */
+#resultados .btn-seleccionar {
+    padding: 4px 10px;
+    font-size: 12px;
+    border-radius: 4px;
+    border: 1px solid #b0b5c1;
+    background-color: #f5f5f5;
+    cursor: pointer;
+}
+
+#resultados .btn-seleccionar:hover {
+    background-color: #e6e6e6;
+}
+/* --- Estilo de cada tarjeta de huésped --- */
+.resultado-item {
+    border-bottom: 1px solid #ddd;   /* línea suave */
+    padding: 15px 5px;
+    display: flex;
+    justify-content: space-between;  /* texto a la izquierda, botón a la derecha */
+    align-items: center;
+}
+
+.resultado-item:last-child {
+    border-bottom: none; /* evita línea final */
+}
+
+/* Contenedor del texto */
+.resultado-info {
+    line-height: 1.4;
+}
+
+/* Botón modificar */
+.btn-modificar {
+    padding: 6px 12px;
+    font-size: 13px;
+    cursor: pointer;
+    border-radius: 4px;
+    border: 1px solid #b0b5c1;
+    background-color: #f0f0f0;
+    transition: background-color .2s ease;
+}
+
+.btn-modificar:hover {
+    background-color: #e1e1e1;
+}
+/* --- Tarjeta visual de cada huésped --- */
+.resultado-item {
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;          /* borde suave */
+    border-radius: 10px;                /* esquinas redondeadas */
+    padding: 15px 20px;
+    margin-bottom: 18px;                /* separación entre tarjetas */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1); /* sombra suave */
+}
+
+/* Última tarjeta sin borde inferior extra */
+.resultado-item:last-child {
+    margin-bottom: 0;
+}
+
+/* Datos del huésped */
+.resultado-info {
+    line-height: 1.5;
+}
+
+/* Botón de modificar */
+.btn-modificar {
+    padding: 6px 12px;
+    font-size: 13px;
+    cursor: pointer;
+    border-radius: 6px;
+    border: 1px solid #b0b5c1;
+    background-color: #f7f7f7;
+    transition: background-color .2s ease;
+}
+
+.btn-modificar:hover {
+    background-color: #e6e6e6;
+}
+
