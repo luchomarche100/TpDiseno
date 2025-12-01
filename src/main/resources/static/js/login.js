@@ -23,13 +23,12 @@ loginForm.addEventListener('submit', async (event) => {
 
         // 4. Maneja la respuesta del servidor
         if (response.ok) {
-            // CÓDIGO 200 OK: Login Exitoso
             alert('¡Bienvenido! Iniciaste sesión correctamente.');
             
-            // Redirigir al usuario 
-            window.location.href = '/'; 
-            
-        } else if (response.status === 401) {
+            // 👉 Ahora va a la pantalla principal
+            window.location.href = '/inicio';
+        }
+         else if (response.status === 401) {
             // CÓDIGO 401 UNAUTHORIZED: Credenciales Inválidas
             alert('Error: Credenciales inválidas. Usuario o contraseña incorrectos.');
             

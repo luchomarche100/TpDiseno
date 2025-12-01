@@ -8,37 +8,52 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class ViewController {
 
     @GetMapping("/")
-    public String index() {
-        return "index"; 
+    public String raiz() {
+        return "login";      // login.html
     }
 
     @GetMapping("/login")
     public String mostrarLogin() {
-        return "login"; 
+        return "login";      // login.html
     }
 
     @GetMapping("/register")
-    public String mostrarRegister() {
-        return "register"; 
+    public String mostrarRegistro() {
+        return "register";   // register.html
     }
-    @GetMapping("/buscar")
-    public String mostrarBuscar() {
-        return "buscar";
+
+    @GetMapping("/inicio")
+    public String mostrarInicio() {
+        return "inicio";     // inicio.html (lo creamos abajo)
+    }
+
+    @GetMapping("/huespedes/alta")
+    public String mostrarAltaHuesped() {
+        return "index";      // index.html = Formulario Alta Huésped
+    }
+
+    @GetMapping("/huespedes/buscar")
+    public String mostrarBuscarHuesped() {
+        return "buscar";     // buscar.html
     }
 
     @GetMapping("/huespedes/modificar")
     public String mostrarModificarHuesped() {
-        return "modificar"; // buscará modificar.html en el mismo lugar que 'buscar'
+        return "modificar";  // modificar.html
     }
-    
 
     @GetMapping("/habitaciones/estado")
     public String mostrarEstadoHabitaciones() {
-        return "EstadoHabitacion";
+        return "EstadoHabitacion"; // EstadoHabitacion.html
     }
-    
+
     @GetMapping("/habitaciones/reservar")
     public String mostrarReservarHabitacion() {
-        return "reservar";
+        return "reservar";   // reservar.html
     }
-}   
+
+    @GetMapping("/habitaciones/ocupar")
+    public String mostrarOcuparHabitacion() {
+        return "ocupar";     // ocupar.html (la podrás crear después)
+    }
+}

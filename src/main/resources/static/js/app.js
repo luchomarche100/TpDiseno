@@ -1,8 +1,36 @@
 const form = document.getElementById("huespedForm");
 
+// Modal de éxito
+const modalExito = document.getElementById("modalExito");
+const mensajeExito = document.getElementById("mensajeExito");
+const btnOtro = document.getElementById("btnOtro");
+const btnSiguiente = document.getElementById("btnSiguiente");
+
 // Aplicar máscara de fecha al input
 const inputFechaNac = document.getElementById("fechaDeNacimiento");
 aplicarMascaraFecha(inputFechaNac);
+
+// Función para mostrar el modal de éxito
+function mostrarModalExito(nombres, apellido) {
+  if (mensajeExito) {
+    mensajeExito.textContent =
+      `El huésped ${nombres} ${apellido} ha sido satisfactoriamente ` +
+      `cargado al sistema.\n¿Desea cargar otro huésped?`;
+  }
+  modalExito.style.display = "flex";
+}
+
+// Botón "Cargar otro huésped"
+btnOtro.addEventListener("click", () => {
+  modalExito.style.display = "none";
+  form.reset();
+  form.nombres.focus();
+});
+
+// Botón "Siguiente" → ir a inicio
+btnSiguiente.addEventListener("click", () => {
+  window.location.href = "/inicio";
+});
 
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
@@ -14,6 +42,7 @@ form.addEventListener("submit", async (event) => {
     form.fechaDeNacimiento.focus();
     return;
   }
+
   const dataForm = {
     nombres: form.nombres.value,
     apellido: form.apellido.value,
@@ -37,6 +66,7 @@ form.addEventListener("submit", async (event) => {
       pais: form.pais.value,
     },
   };
+
   try {
     const response = await fetch("http://localhost:8080/api/huespedes", {
       method: "POST",
@@ -48,6 +78,7 @@ form.addEventListener("submit", async (event) => {
 
     if (!response.ok) {
       const error = await response.json().catch(() => null);
+
       if (error && error.codigo === "DATOS_OBLIGATORIOS_INCOMPLETOS") {
         // Armamos un mensaje con todos los errores de campos
         let mensaje = "Faltan completar datos obligatorios:\n\n";
@@ -57,12 +88,13 @@ form.addEventListener("submit", async (event) => {
           });
         }
         alert(mensaje);
-
         return;
       }
+
       if (error && error.codigo === "DOCUMENTO_DUPLICADO") {
         const aceptarIgualmente = confirm(
-          "¡CUIDADO! El tipo y número de documento ya existen en el sistema.\n\n¿Desea ACEPTAR IGUALMENTE?"
+          "¡CUIDADO! El tipo y número de documento ya existen en el sistema.\n\n" +
+          "¿Desea ACEPTAR IGUALMENTE?"
         );
 
         if (aceptarIgualmente) {
@@ -77,10 +109,8 @@ form.addEventListener("submit", async (event) => {
             return;
           }
           const result2 = await response2.json();
-          alert(
-            `El huésped ${result2.nombres} ${result2.apellido} ha sido satisfactoriamente cargado al sistema.`
-          );
-          form.reset();
+          // mostramos el mismo cartel de éxito
+          mostrarModalExito(result2.nombres, result2.apellido);
           return;
         } else {
           document.getElementById("nroDocumento").focus();
@@ -91,18 +121,11 @@ form.addEventListener("submit", async (event) => {
         return;
       }
     }
+
     const result = await response.json();
+    // Cartel con "¿Desea cargar otro?" + botón Siguiente
+    mostrarModalExito(result.nombres, result.apellido);
 
-    const deseaOtro = confirm(
-      `El huésped ${result.nombres} ${result.apellido} ha sido satisfactoriamente cargado al sistema.\n\n¿Desea cargar otro?`
-    );
-
-    if (deseaOtro) {
-      form.reset();
-      form.nombres.focus();
-    } else {
-      alert("Alta finalizada.");
-    }
   } catch (err) {
     alert("No se pudo conectar con el servidor.");
   }
@@ -112,9 +135,7 @@ const btnCancelar = document.getElementById("cancelar");
 
 btnCancelar.addEventListener("click", () => {
   const deseaCancelar = confirm("¿Desea cancelar el alta del huésped?");
-
   if (deseaCancelar) {
     form.reset();
-  } else {
   }
 });
