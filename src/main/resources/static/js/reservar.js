@@ -34,7 +34,12 @@ let estadoApp = {
   fechas: [],
   fechaDesde: null,
   fechaHasta: null,
-  selecciones: {} // { habitacionId: { inicio: Date, fin: Date } }
+  selecciones: {}, // { habitacionId: { inicio: Date, fin: Date } }
+  seleccionRango: {
+    activo: false,
+    habitacionId: null,
+    fechaInicio: null
+  }
 };
 
 // Utilidad: generar array de fechas entre dos fechas (string yyyy-mm-dd)
@@ -172,6 +177,15 @@ function renderGrid(data) {
     h.estadosPorFechaMap = {};
     h.estadosPorDia.forEach((ed) => {
       h.estadosPorFechaMap[ed.fecha] = ed.estado;
+      // Guardar también la info de reserva si existe
+      if (ed.reservaNombre || ed.reservaApellido) {
+        if (!h.reservasPorFecha) h.reservasPorFecha = {};
+        h.reservasPorFecha[ed.fecha] = {
+          nombre: ed.reservaNombre || "",
+          apellido: ed.reservaApellido || "",
+          telefono: ed.reservaTelefono || ""
+        };
+      }
     });
   });
 
@@ -213,10 +227,16 @@ function renderGrid(data) {
         const estado = h.estadosPorFechaMap[fechaKey] || "DISPONIBLE";
         const claseCSS = claseEstado(estado);
         const clickeable = estado === "DISPONIBLE" ? 'clickeable' : '';
-        html += `<td class='cell-estado ${claseCSS} ${clickeable}' 
-                     data-habitacion='${h.numeroHabitacion}' 
-                     data-fecha='${fechaKey}' 
-                     data-estado='${estado}'></td>`;
+        
+        // Agregar data attributes con info de reserva si existe
+        let dataAttr = `data-habitacion='${h.numeroHabitacion}' data-fecha='${fechaKey}' data-estado='${estado}'`;
+        
+        if (estado === "RESERVADA" && h.reservasPorFecha && h.reservasPorFecha[fechaKey]) {
+          const reserva = h.reservasPorFecha[fechaKey];
+          dataAttr += ` data-reserva-nombre='${reserva.nombre}' data-reserva-apellido='${reserva.apellido}' data-reserva-telefono='${reserva.telefono}'`;
+        }
+        
+        html += `<td class='cell-estado ${claseCSS} ${clickeable}' ${dataAttr}></td>`;
       });
     });
 
@@ -232,141 +252,257 @@ function renderGrid(data) {
   agregarEventListenersSeleccion();
 }
 
-let seleccionActual = {
-  habitacion: null,
-  fechaInicio: null,
-  seleccionando: false
-};
-
 function agregarEventListenersSeleccion() {
   const celdas = document.querySelectorAll('.cell-estado.clickeable');
   
   celdas.forEach(celda => {
-    celda.addEventListener('mousedown', (e) => {
-      const habitacion = e.target.dataset.habitacion;
-      const fecha = e.target.dataset.fecha;
-      const estado = e.target.dataset.estado;
+    celda.addEventListener('click', manejarClickCelda);
+    celda.addEventListener('contextmenu', manejarClickDerechoCelda);
+    celda.addEventListener('mouseenter', manejarHoverCelda);
+  });
+}
+
+function manejarClickDerechoCelda(event) {
+  event.preventDefault(); // Evitar menú contextual
+  
+  const celda = event.target;
+  const habitacionId = celda.dataset.habitacion;
+  const fecha = celda.dataset.fecha;
+  
+  // Si esta habitación tiene selección, limpiarla
+  if (estadoApp.selecciones[habitacionId]) {
+    delete estadoApp.selecciones[habitacionId];
+    limpiarSeleccionHabitacion(habitacionId);
+    actualizarResumen();
+  }
+}
+
+function manejarClickCelda(event) {
+  const celda = event.target;
+  const habitacionId = celda.dataset.habitacion;
+  const fecha = celda.dataset.fecha;
+  const estado = celda.dataset.estado;
+
+  // Si no hay selección activa, iniciar una nueva
+  if (!estadoApp.seleccionRango.activo) {
+    estadoApp.seleccionRango.activo = true;
+    estadoApp.seleccionRango.habitacionId = habitacionId;
+    estadoApp.seleccionRango.fechaInicio = fecha;
+    
+    // Marcar visualmente como inicio de selección
+    celda.style.border = "3px solid #fbbf24";
+  } else {
+    // Si ya hay una selección activa y es de la misma habitación
+    if (estadoApp.seleccionRango.habitacionId === habitacionId) {
+      const fechaFin = fecha;
+      const fechaIni = estadoApp.seleccionRango.fechaInicio;
       
-      if (estado !== 'DISPONIBLE') return;
+      // Limpiar el borde de la primera celda
+      const primeraCelda = document.querySelector(
+        `.cell-estado[data-habitacion="${habitacionId}"][data-fecha="${fechaIni}"]`
+      );
+      if (primeraCelda) primeraCelda.style.border = "";
       
-      seleccionActual.habitacion = habitacion;
-      seleccionActual.fechaInicio = fecha;
-      seleccionActual.seleccionando = true;
+      // Seleccionar todas las celdas en el rango
+      seleccionarRangoCeldas(habitacionId, fechaIni, fechaFin);
       
-      marcarCelda(habitacion, fecha, true);
+      // Resetear el estado de selección de rango
+      estadoApp.seleccionRango = {
+        activo: false,
+        habitacionId: null,
+        fechaInicio: null
+      };
+    } else {
+      // Si es de otra habitación, cancelar la selección anterior y empezar nueva
+      const celdaAnterior = document.querySelector(
+        `.cell-estado[data-habitacion="${estadoApp.seleccionRango.habitacionId}"][data-fecha="${estadoApp.seleccionRango.fechaInicio}"]`
+      );
+      if (celdaAnterior) celdaAnterior.style.border = "";
+      
+      estadoApp.seleccionRango.activo = true;
+      estadoApp.seleccionRango.habitacionId = habitacionId;
+      estadoApp.seleccionRango.fechaInicio = fecha;
+      celda.style.border = "3px solid #fbbf24";
+    }
+  }
+  
+  // Limpiar previews
+  document.querySelectorAll(".cell-preview").forEach(c => {
+    c.classList.remove("cell-preview");
+  });
+}
+
+function manejarHoverCelda(event) {
+  if (!estadoApp.seleccionRango.activo) return;
+  
+  const celda = event.target;
+  const habitacionId = celda.dataset.habitacion;
+  const fecha = celda.dataset.fecha;
+  
+  // Solo mostrar preview si es de la misma habitación
+  if (estadoApp.seleccionRango.habitacionId === habitacionId) {
+    // Limpiar previews anteriores
+    document.querySelectorAll(".cell-preview").forEach(c => {
+      c.classList.remove("cell-preview");
     });
     
-    celda.addEventListener('mouseenter', (e) => {
-      if (!seleccionActual.seleccionando) return;
-      
-      const habitacion = e.target.dataset.habitacion;
-      const fecha = e.target.dataset.fecha;
-      
-      if (habitacion !== seleccionActual.habitacion) return;
-      
-      actualizarSeleccionVisual(habitacion, seleccionActual.fechaInicio, fecha);
+    // Mostrar preview del rango
+    const fechaIni = estadoApp.seleccionRango.fechaInicio;
+    const fechaFin = fecha;
+    const [f1, f2] = fechaIni <= fechaFin ? [fechaIni, fechaFin] : [fechaFin, fechaIni];
+    
+    const todasCeldas = gridContainer.querySelectorAll(".cell-estado[data-habitacion]");
+    todasCeldas.forEach(c => {
+      if (c.dataset.habitacion === habitacionId) {
+        const f = c.dataset.fecha;
+        if (f >= f1 && f <= f2) {
+          c.classList.add("cell-preview");
+        }
+      }
     });
-  });
-  
-  document.addEventListener('mouseup', () => {
-    if (seleccionActual.seleccionando) {
-      finalizarSeleccion();
-    }
-  });
-}
-
-function marcarCelda(habitacion, fecha, seleccionada) {
-  const celda = document.querySelector(
-    `.cell-estado[data-habitacion="${habitacion}"][data-fecha="${fecha}"]`
-  );
-  if (celda) {
-    if (seleccionada) {
-      celda.classList.add('cell-seleccionada');
-    } else {
-      celda.classList.remove('cell-seleccionada');
-    }
   }
 }
 
-function actualizarSeleccionVisual(habitacion, fechaInicio, fechaFin) {
-  // Limpiar selección anterior de esta habitación
-  const celdasHabitacion = document.querySelectorAll(
-    `.cell-estado[data-habitacion="${habitacion}"]`
-  );
-  celdasHabitacion.forEach(c => c.classList.remove('cell-seleccionada'));
+function seleccionarRangoCeldas(habitacionId, fechaIni, fechaFin) {
+  // Determinar el orden correcto de las fechas
+  const [f1, f2] = fechaIni <= fechaFin ? [fechaIni, fechaFin] : [fechaFin, fechaIni];
   
-  // Determinar rango
-  const f1 = new Date(fechaInicio);
-  const f2 = new Date(fechaFin);
-  const desde = f1 < f2 ? f1 : f2;
-  const hasta = f1 < f2 ? f2 : f1;
+  // Verificar si hay celdas no disponibles en el rango
+  const todasCeldas = gridContainer.querySelectorAll(".cell-estado[data-habitacion]");
+  const celdasEnRango = [];
+  let hayReservada = false;
+  const fechasReservadas = [];
   
-  // Marcar celdas en el rango
-  let actual = new Date(desde);
-  while (actual <= hasta) {
-    const fechaKey = actual.toISOString().split('T')[0];
-    marcarCelda(habitacion, fechaKey, true);
-    actual.setDate(actual.getDate() + 1);
-  }
-}
-
-function finalizarSeleccion() {
-  if (!seleccionActual.habitacion || !seleccionActual.fechaInicio) {
-    seleccionActual.seleccionando = false;
+  todasCeldas.forEach(celda => {
+    if (celda.dataset.habitacion === habitacionId) {
+      const f = celda.dataset.fecha;
+      if (f >= f1 && f <= f2) {
+        celdasEnRango.push(celda);
+        if (celda.dataset.estado !== "DISPONIBLE") {
+          if (celda.dataset.estado === "RESERVADA") {
+            hayReservada = true;
+            fechasReservadas.push(f);
+          } else {
+            // Si hay alguna celda ocupada o en mantenimiento, no permitir
+            errorDiv.textContent = `No se puede reservar: la habitación ${habitacionId} tiene días no disponibles en el rango seleccionado.`;
+            return;
+          }
+        }
+      }
+    }
+  });
+  
+  // Si hay alguna reservada, mostrar advertencia
+  if (hayReservada) {
+    buscarInfoReservaYConfirmar(habitacionId, fechasReservadas, celdasEnRango, f1, f2);
     return;
   }
   
-  // Buscar la última celda seleccionada
-  const celdasSeleccionadas = document.querySelectorAll(
-    `.cell-estado[data-habitacion="${seleccionActual.habitacion}"].cell-seleccionada`
-  );
-  
-  if (celdasSeleccionadas.length > 0) {
-    const fechas = Array.from(celdasSeleccionadas).map(c => c.dataset.fecha).sort();
-    const fechaInicio = fechas[0];
-    const fechaFin = fechas[fechas.length - 1];
-    
-    // Verificar que todas las celdas en el rango estén disponibles
-    if (verificarDisponibilidadRango(seleccionActual.habitacion, fechaInicio, fechaFin)) {
-      estadoApp.selecciones[seleccionActual.habitacion] = {
-        inicio: fechaInicio,
-        fin: fechaFin
-      };
-      actualizarResumen();
-    } else {
-      errorDiv.textContent = "Una o más fechas seleccionadas no están disponibles.";
-      limpiarSeleccionHabitacion(seleccionActual.habitacion);
-    }
-  }
-  
-  seleccionActual.habitacion = null;
-  seleccionActual.fechaInicio = null;
-  seleccionActual.seleccionando = false;
+  // Si todas están disponibles, seleccionar
+  seleccionarCeldas(habitacionId, celdasEnRango, f1, f2);
 }
 
-function verificarDisponibilidadRango(habitacion, fechaInicio, fechaFin) {
-  const f1 = new Date(fechaInicio);
-  const f2 = new Date(fechaFin);
+function seleccionarCeldas(habitacionId, celdasEnRango, f1, f2) {
+  // Limpiar selección anterior de esta habitación
+  limpiarSeleccionHabitacion(habitacionId);
   
-  let actual = new Date(f1);
-  while (actual <= f2) {
-    const fechaKey = actual.toISOString().split('T')[0];
-    const celda = document.querySelector(
-      `.cell-estado[data-habitacion="${habitacion}"][data-fecha="${fechaKey}"]`
-    );
-    if (!celda || celda.dataset.estado !== 'DISPONIBLE') {
-      return false;
+  // Marcar todas las celdas del rango
+  celdasEnRango.forEach(celda => {
+    celda.classList.add("cell-seleccionada");
+  });
+  
+  // Guardar en estadoApp.selecciones
+  estadoApp.selecciones[habitacionId] = {
+    inicio: f1,
+    fin: f2
+  };
+  
+  // Limpiar previews
+  document.querySelectorAll(".cell-preview").forEach(c => {
+    c.classList.remove("cell-preview");
+  });
+  
+  actualizarResumen();
+}
+
+async function buscarInfoReservaYConfirmar(habitacionId, fechasReservadas, celdasEnRango, f1, f2) {
+  try {
+    let infoReservas = new Map();
+    
+    // Recopilar información de reservas de las celdas
+    celdasEnRango.forEach(celda => {
+      if (celda.dataset.estado === "RESERVADA") {
+        const fecha = celda.dataset.fecha;
+        const nombre = celda.dataset.reservaNombre || "";
+        const apellido = celda.dataset.reservaApellido || "";
+        const telefono = celda.dataset.reservaTelefono || "";
+        
+        if (nombre || apellido) {
+          const key = `${nombre} ${apellido}`.trim();
+          if (!infoReservas.has(key)) {
+            infoReservas.set(key, {
+              nombre: nombre,
+              apellido: apellido,
+              telefono: telefono,
+              fechas: []
+            });
+          }
+          infoReservas.get(key).fechas.push(fecha);
+        }
+      }
+    });
+    
+    // Construir mensaje de confirmación
+    const fechasFormateadas = fechasReservadas.map(f => convertirFechaAArgentina(f)).join(", ");
+    
+    let mensaje = `⚠️ ADVERTENCIA: Esta habitación tiene fechas RESERVADAS\n\n`;
+    mensaje += `Habitación: ${habitacionId}\n`;
+    mensaje += `Fechas reservadas: ${fechasFormateadas}\n`;
+    mensaje += `Cantidad de días: ${fechasReservadas.length}\n\n`;
+    
+    if (infoReservas.size > 0) {
+      mensaje += `Información de reserva(s):\n`;
+      infoReservas.forEach((info, key) => {
+        if (key) {
+          mensaje += `\n- Titular: ${info.nombre} ${info.apellido}\n`;
+          if (info.telefono) {
+            mensaje += `  Teléfono: ${info.telefono}\n`;
+          }
+          mensaje += `  Días: ${info.fechas.length}\n`;
+        }
+      });
+      mensaje += `\n`;
     }
-    actual.setDate(actual.getDate() + 1);
+    
+    mensaje += `¿Desea RESERVAR de todas formas?\n`;
+    mensaje += `(Esto puede generar conflictos con la reserva existente)`;
+    
+    const confirmar = confirm(mensaje);
+    
+    if (confirmar) {
+      seleccionarCeldas(habitacionId, celdasEnRango, f1, f2);
+    }
+  } catch (error) {
+    console.error("Error al buscar info de reserva:", error);
+    
+    const confirmar = confirm(
+      `Esta habitación tiene fechas RESERVADAS.\n¿Desea reservarla de todas formas?`
+    );
+    
+    if (confirmar) {
+      seleccionarCeldas(habitacionId, celdasEnRango, f1, f2);
+    }
   }
-  return true;
 }
 
 function limpiarSeleccionHabitacion(habitacion) {
   const celdas = document.querySelectorAll(
     `.cell-estado[data-habitacion="${habitacion}"]`
   );
-  celdas.forEach(c => c.classList.remove('cell-seleccionada'));
+  celdas.forEach(c => {
+    c.classList.remove('cell-seleccionada');
+    c.style.border = "";
+  });
   delete estadoApp.selecciones[habitacion];
 }
 
@@ -647,7 +783,12 @@ btnLimpiar.addEventListener("click", () => {
     fechas: [],
     fechaDesde: null,
     fechaHasta: null,
-    selecciones: {}
+    selecciones: {},
+    seleccionRango: {
+      activo: false,
+      habitacionId: null,
+      fechaInicio: null
+    }
   };
   ocultarResumenYFormulario();
   inputDesde.focus();

@@ -44,8 +44,6 @@ public class Reserva {
     
     @Column(nullable = false)
     private String telefono;
-
-    private Boolean responsable = false;
     
     // Relaciones con huéspedes (para ocupaciones con check-in)
     @ManyToOne

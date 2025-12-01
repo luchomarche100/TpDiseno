@@ -67,4 +67,7 @@ public class Huesped {
     
     @Column(columnDefinition = "VARCHAR(255)")
     private String email;
+    
+    @Column(nullable = false)
+    private Boolean responsable = false;
 }
