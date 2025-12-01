@@ -1,0 +1,103 @@
+/* Fondo general y tipografía */
+body {
+    margin: 0;
+    font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    background: linear-gradient(180deg, #0b3d91 0%, #052546 60%, #04192f 100%);
+    color: #f5f7ff;
+}
+
+/* Contenedor principal centrado */
+.page-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+    box-sizing: border-box;
+}
+
+/* Título de la página */
+.page-title {
+    width: 100%;
+    max-width: 1100px;
+    font-size: 2.4rem;
+    font-weight: 700;
+    margin: 0 0 24px 0;
+}
+
+/* Tarjeta central (similar a Reservar Habitación) */
+.card-menu {
+    width: 100%;
+    max-width: 1100px;
+    background: #050c16;
+    border-radius: 24px;
+    padding: 32px 40px;
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.65);
+    box-sizing: border-box;
+}
+
+/* Texto pequeño arriba de los botones (opcional) */
+.card-menu .subtitle {
+    font-size: 0.95rem;
+    opacity: 0.85;
+    margin-bottom: 20px;
+}
+
+.menu-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); /* 5 columnas */
+    gap: 18px;
+    margin-top: 24px;
+}
+
+/* Primera fila: botones 1, 2 y 3 ocupan 1, 3 y 5 */
+.menu-button:nth-child(1) { grid-column: 2; }
+.menu-button:nth-child(2) { grid-column: 3; }
+.menu-button:nth-child(3) { grid-column: 4; }
+
+/* Segunda fila: botones 4 y 5 centrados debajo */
+.menu-button:nth-child(4) { grid-column: 2; }
+.menu-button:nth-child(5) { grid-column: 4; }
+
+
+/* Estilo base de los botones (tipo pill, como los azules de la reserva) */
+.menu-button {
+    border: none;
+    outline: none;
+    border-radius: 999px;
+    padding: 14px 22px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    background: #1a2740;
+    color: #f5f7ff;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
+    transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+}
+
+/* Hover/active para dar sensación de botón “moderno” */
+.menu-button:hover {
+    background: #2463ff;
+    transform: translateY(-1px);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.6);
+}
+
+.menu-button:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+}
+
+/* Para pantallas chicas */
+@media (max-width: 600px) {
+    .page-title {
+        font-size: 2rem;
+    }
+
+    .card-menu {
+        padding: 24px 18px;
+    }
+
+    .menu-button {
+        width: 100%;
+    }
+}
