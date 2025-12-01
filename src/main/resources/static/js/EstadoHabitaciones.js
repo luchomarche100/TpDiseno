@@ -216,3 +216,10 @@ btnLimpiar.addEventListener("click", () => {
   gridContainer.innerHTML = "";
   inputDesde.focus();
 });
+
+const btnVolver = document.getElementById("btnVolver");
+if (btnVolver) {
+  btnVolver.addEventListener("click", () => {
+    window.history.back();
+  });
+}

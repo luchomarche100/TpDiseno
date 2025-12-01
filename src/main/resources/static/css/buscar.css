@@ -224,3 +224,41 @@ button[type="submit"]:active {
     background-color: #e6e6e6;
 }
 
+/* Clases de botones consistentes */
+.btn {
+    padding: 9px 26px;
+    font-size: 15px;
+    cursor: pointer;
+    border-radius: 4px;
+    border: none;
+    font-weight: bold;
+    transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+}
+
+.btn-primary {
+    background-color: #1d57c0;
+    color: #ffffff;
+}
+
+.btn-primary:hover {
+    background-color: #164693;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+    transform: translateY(-1px);
+}
+
+.btn-secondary {
+    background-color: #6b7280;
+    color: #ffffff;
+}
+
+.btn-secondary:hover {
+    background-color: #4b5563;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+    transform: translateY(-1px);
+}
+
+.btn:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
+

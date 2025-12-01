@@ -134,8 +134,8 @@ form.addEventListener("submit", async (event) => {
 const btnCancelar = document.getElementById("cancelar");
 
 btnCancelar.addEventListener("click", () => {
-  const deseaCancelar = confirm("¿Desea cancelar el alta del huésped?");
-  if (deseaCancelar) {
-    form.reset();
+  const confirmar = confirm("¿Desea cancelar el alta del huésped?");
+  if (confirmar) {
+    window.history.back();
   }
 });
