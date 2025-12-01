@@ -23,9 +23,8 @@ loginForm.addEventListener('submit', async (event) => {
 
         // 4. Maneja la respuesta del servidor
         if (response.ok) {
-            alert('¡Bienvenido! Iniciaste sesión correctamente.');
+            //alert('¡Bienvenido! Iniciaste sesión correctamente.');
             
-            // 👉 Ahora va a la pantalla principal
             window.location.href = '/inicio';
         }
          else if (response.status === 401) {

@@ -1,5 +1,6 @@
 package com.diseno.tpDiseno.controller;
 
+import java.security.Provider.Service;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,21 +11,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.diseno.tpDiseno.dto.request.LoginRequest;
-import com.diseno.tpDiseno.util.ErrorCampo; 
-import com.diseno.tpDiseno.Service.LoginService;
+import com.diseno.tpDiseno.util.ErrorCampo;
+import com.diseno.tpDiseno.Service.GestorUsuario;
 import com.diseno.tpDiseno.Service.Validador;
 import com.diseno.tpDiseno.model.Usuario;
 
 
 @RestController
 @RequestMapping("/api")
-public class LoginController {
+public class UsuarioController {
+
+    private final GestorUsuario gestorUsuario;
 
     @Autowired 
     private Validador validador;
     
-    @Autowired 
-    private LoginService loginService; 
+    public UsuarioController(GestorUsuario gestorUsuario) {
+        this.gestorUsuario = gestorUsuario;
+    } 
 
     @PostMapping("/login") 
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
@@ -39,7 +43,7 @@ public class LoginController {
 
         // --- 2. LÓGICA DE AUTENTICACIÓN (Regla de negocio) ---
         
-        if (loginService.autenticar(loginRequest)) {
+        if (gestorUsuario.autenticar(loginRequest)) {
             
             // Si es válido, devolvemos 200 OK
             return ResponseEntity.ok("Login exitoso.");
@@ -54,7 +58,7 @@ public class LoginController {
         public ResponseEntity<?> registrar(@RequestBody LoginRequest loginRequest) {
         try {
             // Llama al servicio para registrar y verifica la unicidad
-            Usuario nuevoUsuario = loginService.registrarNuevoUsuario(loginRequest);
+            Usuario nuevoUsuario = gestorUsuario.registrarNuevoUsuario(loginRequest);
             
             // Si tiene éxito, devuelve 201 Created
             return ResponseEntity.status(HttpStatus.CREATED).body(nuevoUsuario);

@@ -7,10 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class ViewController {
 
-    @GetMapping("/")
-    public String raiz() {
-        return "login";      // login.html
-    }
+
 
     @GetMapping("/login")
     public String mostrarLogin() {

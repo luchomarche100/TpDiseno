@@ -9,7 +9,7 @@ import com.diseno.tpDiseno.model.Usuario;
 import java.util.Optional;
 
 @Service 
-public class LoginService {
+public class GestorUsuario {
     
     // Inyecta el repositorio para buscar usuarios en la base de datos
     @Autowired
