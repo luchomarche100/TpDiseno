@@ -74,6 +74,8 @@ public class GestorHuesped {
         huesped.setTelefono(request.getTelefono());
         huesped.setOcupacion(request.getOcupacion());
         huesped.setNacionalidad(request.getNacionalidad());
+        huesped.setResponsable(false);
+        huesped.setFacturas(null);
         
         // Mapear dirección de DTO a Entidad
         Direccion direccion = mapearDireccion(request.getDireccion());

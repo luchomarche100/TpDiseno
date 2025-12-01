@@ -2,6 +2,7 @@ package com.diseno.tpDiseno.model;
 
 
 import java.time.LocalDate;
+import java.util.List;
 
 import com.diseno.tpDiseno.util.TipoDocumentoEnum;
 
@@ -13,6 +14,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -67,6 +69,9 @@ public class Huesped {
     
     @Column(columnDefinition = "VARCHAR(255)")
     private String email;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Factura> facturas;
     
     @Column(nullable = false)
     private Boolean responsable = false;
