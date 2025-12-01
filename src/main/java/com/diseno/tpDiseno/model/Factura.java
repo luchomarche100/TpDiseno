@@ -30,4 +30,7 @@ public class Factura {
     private Float IVA;
     @OneToMany(cascade = CascadeType.ALL)
     private List<Pago> pagos;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<NotaDeCredito> notaDeCreditos;
 }
