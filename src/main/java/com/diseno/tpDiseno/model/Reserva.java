@@ -9,6 +9,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,7 +35,7 @@ public class Reserva {
     @ManyToMany
     private List<Habitacion> habitaciones;
     
-    // Datos del eventual huésped
+    // Datos del eventual huésped (para reservas sin check-in)
     @Column(nullable = false)
     private String apellido;
     
@@ -43,4 +44,13 @@ public class Reserva {
     
     @Column(nullable = false)
     private String telefono;
+
+    private Boolean responsable = false;
+    
+    // Relaciones con huéspedes (para ocupaciones con check-in)
+    @ManyToOne
+    private Huesped huespedTitular;
+    
+    @ManyToMany
+    private List<Huesped> acompanantes;
 }

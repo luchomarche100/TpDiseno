@@ -177,6 +177,22 @@ public class GestorHuesped {
             return dto;
         }
 
+    public Huesped obtenerHuespedPorId(Long id) {
+        return huespedDAO.findById(id)
+            .orElseThrow(() -> new ReglaNegocioException(
+                "HUESPED_NO_ENCONTRADO",
+                "No se encontró un huésped con el ID proporcionado: " + id,
+                null
+            ));
+    }
+
+    public List<Huesped> obtenerHuespedesPorIds(List<Long> ids) {
+        if (ids == null || ids.isEmpty()) {
+            return new java.util.ArrayList<>();
+        }
+        return huespedDAO.findAllById(ids);
+    }
+
     public HuespedDTO modificarHuesped(SolicitudHuespedRequest huesped) {
         Huesped huespedExistente = (huespedDAO.findById(huesped.getId())).orElseThrow(() -> 
         new ReglaNegocioException("HUESPED_NO_ENCONTRADO", "No se encontró un huésped con el ID proporcionado", null)

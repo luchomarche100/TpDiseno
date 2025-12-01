@@ -10,6 +10,7 @@ import com.diseno.tpDiseno.Exception.ReglaNegocioException;
 import com.diseno.tpDiseno.dto.request.DireccionRequest;
 import com.diseno.tpDiseno.dto.request.LoginRequest;
 import com.diseno.tpDiseno.dto.request.MostrarEstadoRequest;
+import com.diseno.tpDiseno.dto.request.OcuparHabitacionRequest;
 import com.diseno.tpDiseno.dto.request.ReservarHabitacionRequest;
 import com.diseno.tpDiseno.dto.request.SolicitudHuespedRequest;
 import com.diseno.tpDiseno.model.Habitacion;
@@ -199,7 +200,101 @@ public class Validador {
         error.setMensaje(mensaje);
         return error;
     }
+
+     public void validarReserva(ReservarHabitacionRequest request) {
+        if (request == null) {
+            throw new ReglaNegocioException(
+                "REQUEST_NULO",
+                "El request no puede ser nulo.",
+                List.of(crearError("request", "No se enviaron datos."))
+            );
+        }
+        
+        List<ErrorCampo> errores = new ArrayList<>();
+        
+        // Validar habitaciones seleccionadas
+        if (request.getHabitacionesIds() == null || request.getHabitacionesIds().isEmpty()) {
+            errores.add(crearError("habitacionesIds", "Debe seleccionar al menos una habitación."));
+        }
+        
+        // Validar fechas
+        if (request.getFechaInicio() == null) {
+            errores.add(crearError("fechaInicio", "La fecha de inicio es obligatoria."));
+        }
+        
+        if (request.getFechaFin() == null) {
+            errores.add(crearError("fechaFin", "La fecha de fin es obligatoria."));
+        }
+        
+        // Validar que fecha inicio no sea anterior a hoy
+        if (request.getFechaInicio() != null && request.getFechaInicio().isBefore(LocalDate.now())) {
+            errores.add(crearError("fechaInicio", "La fecha de inicio no puede ser anterior a hoy."));
+        }
+        
+        // Validar que fecha fin sea posterior a fecha inicio
+        if (request.getFechaInicio() != null && request.getFechaFin() != null && 
+            request.getFechaFin().isBefore(request.getFechaInicio())) {
+            errores.add(crearError("fechaFin", "La fecha de fin debe ser posterior a la fecha de inicio."));
+        }
+        
+        // Validar datos del eventual huésped (punto 9 del CU)
+        if (!esTextoNoVacio(request.getApellido())) {
+            errores.add(crearError("apellido", "El apellido no puede estar vacío."));
+        }
+        
+        if (!esTextoNoVacio(request.getNombre())) {
+            errores.add(crearError("nombre", "El nombre no puede estar vacío."));
+        }
+        
+        if (!esTelefonoValido(request.getTelefono())) {
+            errores.add(crearError("telefono", "El teléfono debe tener entre 6 y 15 dígitos."));
+        }
+        
+        // Si hay errores, lanzar excepción
+        if (!errores.isEmpty()) {
+            throw new ReglaNegocioException(
+                "DATOS_INVALIDOS",
+                "Los datos de la reserva no son válidos.",
+                errores
+            );
+        }
+    }
     
+
+    public void validarDisponibilidad(List<Habitacion> habitacionesSeleccionadas, List<Reserva> reservasExistentes) {
+        if (habitacionesSeleccionadas == null || habitacionesSeleccionadas.isEmpty()) {
+            return;
+        }
+        
+        List<ErrorCampo> errores = new ArrayList<>();
+        
+        // Para cada habitación verifica que no este en una reserva que ya existe
+        for (Habitacion habitacion : habitacionesSeleccionadas) {
+            if (reservasExistentes != null) {
+                for (Reserva reserva : reservasExistentes) {
+                    if (reserva.getHabitaciones() != null && reserva.getHabitaciones().contains(habitacion)) {
+                        errores.add(crearError(
+                            "habitacion_" + habitacion.getNumero(),
+                            "La habitación " + habitacion.getNumero() + " no está disponible para las fechas seleccionadas."
+                        ));
+                        break; 
+                    }
+                }
+            }
+        }
+        
+        // Si hay errores, lanzar excepción
+        if (!errores.isEmpty()) {
+            throw new ReglaNegocioException(
+                "HABITACION_NO_DISPONIBLE",
+                "Una o más habitaciones no están disponibles para las fechas seleccionadas.",
+                errores
+            );
+        }
+    }
+
+
+
     // Validaciones individuales
 
     private boolean esTextoNoVacio(String valor) {
@@ -260,7 +355,7 @@ public class Validador {
     }
 
     private boolean esFechaNacimientoValida(LocalDate fecha) {
-        return fecha != null; // acá después podés agregar lógica (mayor de 18, etc.)
+        return fecha != null; 
     }
 
     private boolean esNumeroPositivo(Integer valor) {
@@ -286,10 +381,7 @@ public class Validador {
         return errores;
     }
     
-    /**
-     * Valida los datos del request de reserva según el CU04
-     */
-    public void validarReserva(ReservarHabitacionRequest request) {
+    public void validarOcuparHabitacion(OcuparHabitacionRequest request) {
         if (request == null) {
             throw new ReglaNegocioException(
                 "REQUEST_NULO",
@@ -301,8 +393,8 @@ public class Validador {
         List<ErrorCampo> errores = new ArrayList<>();
         
         // Validar habitaciones seleccionadas
-        if (request.getHabitacionesIds() == null || request.getHabitacionesIds().isEmpty()) {
-            errores.add(crearError("habitacionesIds", "Debe seleccionar al menos una habitación."));
+        if (request.getIdsHabitaciones() == null || request.getIdsHabitaciones().isEmpty()) {
+            errores.add(crearError("idsHabitaciones", "Debe seleccionar al menos una habitación."));
         }
         
         // Validar fechas
@@ -325,62 +417,19 @@ public class Validador {
             errores.add(crearError("fechaFin", "La fecha de fin debe ser posterior a la fecha de inicio."));
         }
         
-        // Validar datos del eventual huésped (punto 9 del CU)
-        if (!esTextoNoVacio(request.getApellido())) {
-            errores.add(crearError("apellido", "El apellido no puede estar vacío."));
-        }
-        
-        if (!esTextoNoVacio(request.getNombre())) {
-            errores.add(crearError("nombre", "El nombre no puede estar vacío."));
-        }
-        
-        if (!esTelefonoValido(request.getTelefono())) {
-            errores.add(crearError("telefono", "El teléfono debe tener entre 6 y 15 dígitos."));
+        // Validar huésped titular
+        if (request.getIdHuespedTitular() == null) {
+            errores.add(crearError("idHuespedTitular", "Debe seleccionar un huésped titular."));
         }
         
         // Si hay errores, lanzar excepción
         if (!errores.isEmpty()) {
             throw new ReglaNegocioException(
                 "DATOS_INVALIDOS",
-                "Los datos de la reserva no son válidos.",
+                "Los datos para ocupar la habitación no son válidos.",
                 errores
             );
         }
     }
     
-    /**
-     * Valida la disponibilidad de las habitaciones según las reservas existentes.
-     * Verifica que no haya solapamiento de fechas (punto 3.B del CU04).
-     */
-    public void validarDisponibilidad(List<Habitacion> habitacionesSeleccionadas, List<Reserva> reservasExistentes) {
-        if (habitacionesSeleccionadas == null || habitacionesSeleccionadas.isEmpty()) {
-            return;
-        }
-        
-        List<ErrorCampo> errores = new ArrayList<>();
-        
-        // Para cada habitación seleccionada, verificar que no esté en una reserva existente
-        for (Habitacion habitacion : habitacionesSeleccionadas) {
-            if (reservasExistentes != null) {
-                for (Reserva reserva : reservasExistentes) {
-                    if (reserva.getHabitaciones() != null && reserva.getHabitaciones().contains(habitacion)) {
-                        errores.add(crearError(
-                            "habitacion_" + habitacion.getNumero(),
-                            "La habitación " + habitacion.getNumero() + " no está disponible para las fechas seleccionadas."
-                        ));
-                        break; // No necesitamos seguir revisando reservas para esta habitación
-                    }
-                }
-            }
-        }
-        
-        // Si hay habitaciones no disponibles, lanzar excepción
-        if (!errores.isEmpty()) {
-            throw new ReglaNegocioException(
-                "HABITACION_NO_DISPONIBLE",
-                "Una o más habitaciones no están disponibles para las fechas seleccionadas.",
-                errores
-            );
-        }
-    }
 }

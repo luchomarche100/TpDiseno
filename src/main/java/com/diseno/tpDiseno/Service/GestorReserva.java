@@ -35,4 +35,23 @@ public List<Reserva> obtenerReservaPorFecha(LocalDate fechaInicio, LocalDate fec
     List<Reserva> reservas = reservaDao.findAllByFechaBetween(fechaInicio, fechaFin);
     return reservas; // Retornar la lista (puede estar vacía)
 }
+
+public Reserva obtenerReservaPorFechaYHabitacion(LocalDate fechaInicio, LocalDate fechaFin, Long idHabitacion) {
+    List<Reserva> reservas = reservaDao.findAllByFechaBetween(fechaInicio, fechaFin);
+    
+    for (Reserva reserva : reservas) {
+        for (Habitacion habitacion : reserva.getHabitaciones()) {
+            if (habitacion.getNumero().equals(idHabitacion)) {
+                return reserva;
+            }
+        }
+    }
+    
+    // Si no se encuentra, retornar null o lanzar excepción según el caso de uso
+    return null;
+}
+
+public void guardarReserva(Reserva reserva) {
+    reservaDao.save(reserva);
+}
 }

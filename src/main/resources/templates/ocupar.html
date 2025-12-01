@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Ocupar Habitaciones</title>
+    <link rel="stylesheet" href="/css/ocupar.css" />
+  </head>
+  <body>
+    <div class="page-container">
+      <h1 class="page-title">Ocupar habitaciones</h1>
+
+      <!-- PASO 1: Mostrar estado de habitaciones -->
+      <div class="card" id="paso1Card">
+        <h2 class="card-title">Paso 1: Seleccionar habitaciones</h2>
+        
+        <div class="filters-row">
+          <div class="field">
+            <label for="fechaDesde">Desde fecha (dd/mm/aaaa):</label>
+            <input type="text" id="fechaDesde" placeholder="dd/mm/aaaa" />
+          </div>
+          <div class="field">
+            <label for="fechaHasta">Hasta fecha (dd/mm/aaaa):</label>
+            <input type="text" id="fechaHasta" placeholder="dd/mm/aaaa" />
+          </div>
+          <div class="buttons-row">
+            <button class="btn btn-primary" id="btnMostrarEstado">Mostrar Estado</button>
+            <button class="btn btn-secondary" id="btnLimpiarFechas">Limpiar</button>
+          </div>
+        </div>
+
+        <div id="errorFechas" class="error-message"></div>
+
+        <!-- Instrucciones de selección -->
+        <div id="instruccionesSeleccion" class="instrucciones" style="display: none;">
+          <p><strong>💡 Cómo seleccionar:</strong></p>
+          <ul>
+            <li><strong>Clic izquierdo</strong> en una fecha para iniciar la selección</li>
+            <li><strong>Clic izquierdo</strong> en otra fecha <strong>de la misma habitación</strong> para seleccionar todo el rango</li>
+            <li><strong>Clic derecho</strong> sobre una celda seleccionada para deseleccionarla</li>
+            <li>Puedes seleccionar múltiples habitaciones y rangos</li>
+            <li>Si una fecha está <strong>reservada</strong>, se mostrará información de la reserva antes de confirmar</li>
+          </ul>
+          <button class="btn btn-secondary btn-small" id="btnCancelarSeleccion" style="display: none;">
+            Cancelar selección actual
+          </button>
+        </div>
+
+        <!-- LEYENDA -->
+        <div class="legend" id="legendContainer" style="display: none;">
+          <div class="legend-item">
+            <span class="legend-color color-disponible"></span> Disponible
+          </div>
+          <div class="legend-item">
+            <span class="legend-color color-reservada"></span> Reservada
+          </div>
+          <div class="legend-item">
+            <span class="legend-color color-ocupada"></span> Ocupada
+          </div>
+          <div class="legend-item">
+            <span class="legend-color color-mantenimiento"></span> Mantenimiento
+          </div>
+          <div class="legend-item">
+            <span class="legend-color color-seleccionada"></span> Seleccionada
+          </div>
+        </div>
+
+        <!-- GRILLA DE ESTADO -->
+        <div class="grid-container" id="gridContainer" style="display: none;">
+          <!-- La tabla se genera dinámicamente por JS -->
+        </div>
+
+        <div class="buttons-row" id="btnContinuarContainer" style="display: none; margin-top: 16px;">
+          <button class="btn btn-primary" id="btnContinuar">Continuar</button>
+        </div>
+      </div>
+
+      <!-- PASO 2: Buscar y seleccionar huéspedes -->
+      <div class="card" id="paso2Card" style="display: none;">
+        <h2 class="card-title">Paso 2: Seleccionar huésped titular y acompañantes</h2>
+        
+        <div class="search-section">
+          <h3>Buscar huésped</h3>
+          <div class="search-form">
+            <div class="form-row">
+              <div class="field">
+                <label for="buscarNombre">Nombre:</label>
+                <input type="text" id="buscarNombre" />
+              </div>
+              <div class="field">
+                <label for="buscarApellido">Apellido:</label>
+                <input type="text" id="buscarApellido" />
+              </div>
+              <div class="field">
+                <label for="buscarTipoDoc">Tipo documento:</label>
+                <select id="buscarTipoDoc">
+                  <option value="">-- Seleccionar --</option>
+                  <option value="DNI">DNI</option>
+                  <option value="PASAPORTE">Pasaporte</option>
+                  <option value="LE">Libreta Enrolamiento</option>
+                  <option value="LC">Libreta Cívica</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="buscarNumDoc">Número documento:</label>
+                <input type="text" id="buscarNumDoc" />
+              </div>
+            </div>
+            <div class="buttons-row">
+              <button class="btn btn-primary" id="btnBuscarHuesped">Buscar</button>
+            </div>
+          </div>
+
+          <div id="errorBusqueda" class="error-message"></div>
+
+          <!-- Resultados de búsqueda -->
+          <div id="resultadosBusqueda" class="resultados-container" style="display: none;">
+            <!-- Los resultados se insertan dinámicamente -->
+          </div>
+        </div>
+
+        <!-- Huéspedes seleccionados -->
+        <div class="seleccionados-section">
+          <h3>Huéspedes seleccionados</h3>
+          <div id="huespedTitular" class="huesped-seleccionado">
+            <strong>Titular:</strong> <span id="titularInfo">No seleccionado</span>
+          </div>
+          <div id="acompanantesContainer">
+            <strong>Acompañantes:</strong>
+            <div id="listaAcompanantes" style="margin-top: 8px;">
+              <span class="no-acompanantes">Ninguno seleccionado</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="buttons-row" style="margin-top: 24px;">
+          <button class="btn btn-primary" id="btnConfirmarOcupacion">Confirmar Ocupación</button>
+          <button class="btn btn-secondary" id="btnVolverPaso1">Volver</button>
+        </div>
+      </div>
+
+      <!-- PASO 3: Confirmación -->
+      <div class="card" id="paso3Card" style="display: none;">
+        <h2 class="card-title">✓ Ocupación confirmada</h2>
+        <div id="mensajeConfirmacion" class="success-message"></div>
+        <div class="buttons-row" style="margin-top: 24px;">
+          <button class="btn btn-primary" id="btnNuevaOcupacion">Nueva Ocupación</button>
+          <button class="btn btn-secondary" id="btnVolverInicio">Volver a Inicio</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="/js/utils-fecha.js"></script>
+    <script src="/js/ocupar.js"></script>
+  </body>
+</html>
