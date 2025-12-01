@@ -3,6 +3,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById("form-buscar-huesped");
     const divResultados = document.getElementById("resultados");
 
+    // 🔵 Al cargar la página, aseguramos que esté oculto
+    divResultados.style.display = "none";
+
     form.addEventListener("submit", async (e) => {
         e.preventDefault(); // evita recargar la página
 
@@ -47,31 +50,35 @@ document.addEventListener("DOMContentLoaded", () => {
             // Limpiar resultados anteriores
             divResultados.innerHTML = "";
 
+            // 🔵 A PARTIR DE AQUÍ MOSTRAMOS EL RECTÁNGULO
+            divResultados.style.display = "inline-block";
+
             if (!Array.isArray(lista) || lista.length === 0) {
                 divResultados.innerHTML = "<p>No se encontraron huéspedes.</p>";
                 return;
             }
 
             // Dibujar cada huésped
-            divResultados.innerHTML = ""; // limpiar resultados anteriores
-
             lista.forEach(h => {
                 const tarjeta = document.createElement("div");
-                tarjeta.style.border = "1px solid #ccc";
-                tarjeta.style.padding = "10px";
-                tarjeta.style.margin = "10px 0";
+                tarjeta.classList.add("resultado-item"); // Nueva clase
 
                 tarjeta.innerHTML = `
-                    <p><strong>Nombre:</strong> ${h.nombres ?? ""}</p>
-                    <p><strong>Apellido:</strong> ${h.apellido ?? ""}</p>
-                    <p><strong>Tipo Doc:</strong> ${h.tipoDocumento ?? ""}</p>
-                    <p><strong>Nro Doc:</strong> ${h.nroDocumento ?? ""}</p>
+                    <div class="resultado-info">
+                        <p><strong>Nombre:</strong> ${h.nombres ?? ""}</p>
+                        <p><strong>Apellido:</strong> ${h.apellido ?? ""}</p>
+                        <p><strong>Tipo Doc:</strong> ${h.tipoDocumento ?? ""}</p>
+                        <p><strong>Nro Doc:</strong> ${h.nroDocumento ?? ""}</p>
+                    </div>
                 `;
+
 
                 // 🔵 Botón "Modificar" que REDIRIGE con todos los datos por query string
                 const botonModificar = document.createElement("button");
                 botonModificar.type = "button";
                 botonModificar.textContent = "Modificar";
+                botonModificar.classList.add("btn-modificar");
+
 
                 botonModificar.addEventListener("click", () => {
                     const params = new URLSearchParams({

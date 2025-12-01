@@ -3,74 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <title>Buscar huésped</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        label {
-            font-weight: bold;
-            display: block;
-            margin-bottom: 5px;
-        }
-        input, select {
-            width: 300px;
-            padding: 6px;
-            font-size: 14px;
-        }
-        .comentario {
-            color: #555;
-            margin-bottom: 20px;
-        }
-        button {
-            padding: 10px 20px;
-            font-size: 15px;
-            cursor: pointer;
-        }
-    </style>
+    <link rel="stylesheet" href="/css/buscar.css">
 </head>
+
 <body>
 
     <h1>Buscar huésped</h1>
     <p class="comentario">Puede omitir campos.</p>
 
-    <form id="form-buscar-huesped">
+    <!-- 🔵 CONTENEDOR QUE ORDENA TODO -->
+    <div class="contenedor-principal">
+        
+        <!-- 🔵 FORMULARIO -->
+        <form id="form-buscar-huesped">
 
-        <div class="form-group">
-            <label for="nombre">Nombre</label>
-            <input type="text" id="nombre" name="nombre">
-        </div>
+            <div class="form-group">
+                <label for="nombre">Nombre</label>
+                <input type="text" id="nombre" name="nombre">
+            </div>
 
-        <div class="form-group">
-            <label for="apellido">Apellido</label>
-            <input type="text" id="apellido" name="apellido">
-        </div>
+            <div class="form-group">
+                <label for="apellido">Apellido</label>
+                <input type="text" id="apellido" name="apellido">
+            </div>
 
-        <div class="form-group">
-            <label for="tipo-doc">Tipo de documento</label>
-            <select id="tipo-doc" name="tipo-doc">
-                <option value="dni">DNI</option>
-                <option value="pasaporte">Pasaporte</option>
-                <option value="le">Libreta de enrolamiento</option>
-                <option value="lc">Libreta Cívica</option>
-                <option value="otro">Otro</option>
-            </select>
-        </div>
+            <div class="form-group">
+                <label for="tipo-doc">Tipo de documento</label>
+                <select id="tipo-doc" name="tipo-doc">
+                    <option value="dni">DNI</option>
+                    <option value="pasaporte">Pasaporte</option>
+                    <option value="le">Libreta de enrolamiento</option>
+                    <option value="lc">Libreta Cívica</option>
+                    <option value="otro">Otro</option>
+                </select>
+            </div>
 
-        <div class="form-group">
-            <label for="numero-doc">Número de documento</label>
-            <input type="text" id="numero-doc" name="numero-doc">
-        </div>
+            <div class="form-group">
+                <label for="numero-doc">Número de documento</label>
+                <input type="text" id="numero-doc" name="numero-doc">
+            </div>
 
-        <!-- 🔵 BOTÓN QUE EJECUTA EL JAVASCRIPT -->
-        <button type="submit">Buscar</button>
+            <button type="submit">Buscar</button>
 
-    </form>
-    <div id="resultados"></div>
-    <!-- Enlazar el JS -->
+        </form>
+
+        <!-- 🔵 PANEL DE RESULTADOS (inicialmente oculto) -->
+        <div id="resultados"></div>
+
+    </div>
+
     <script src="/js/buscar.js"></script>
 
 </body>
