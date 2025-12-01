@@ -1,0 +1,436 @@
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: linear-gradient(180deg, #234c7a, #111827);
+  color: #f9fafb;
+  min-height: 100vh;
+}
+
+.page-container {
+  max-width: 1400px;
+  margin: 40px auto;
+  padding: 0 24px 40px;
+}
+
+.page-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 24px;
+}
+
+.card {
+  background: #111827;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+  margin-bottom: 24px;
+}
+
+.card-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: #60a5fa;
+}
+
+/* Formularios y campos */
+.filters-row,
+.form-row {
+  display: flex;
+  gap: 16px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 180px;
+  flex: 1;
+}
+
+.field label {
+  font-size: 14px;
+  color: #e5e7eb;
+}
+
+.field input[type="text"],
+.field select {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #4b5563;
+  background: #0f172a;
+  color: #f9fafb;
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.field input[type="text"]:focus,
+.field select:focus {
+  outline: none;
+  border-color: #2563eb;
+}
+
+/* Botones */
+.buttons-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  border-radius: 999px;
+  padding: 10px 24px;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.btn-primary {
+  background: #2563eb;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #1d4ed8;
+}
+
+.btn-secondary {
+  background: #374151;
+  color: #e5e7eb;
+}
+
+.btn-secondary:hover {
+  background: #4b5563;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Mensajes */
+.error-message {
+  margin-top: 8px;
+  color: #fca5a5;
+  font-size: 14px;
+}
+
+.instrucciones {
+  background: #0f172a;
+  border: 1px solid #374151;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin: 12px 0;
+  font-size: 13px;
+}
+
+.instrucciones p {
+  margin: 0 0 8px 0;
+  color: #60a5fa;
+}
+
+.instrucciones ul {
+  margin: 8px 0;
+  padding-left: 24px;
+  color: #d1d5db;
+}
+
+.instrucciones li {
+  margin: 4px 0;
+}
+
+.btn-small {
+  padding: 6px 16px;
+  font-size: 12px;
+  margin-top: 8px;
+}
+
+.success-message {
+  padding: 16px;
+  background: #065f46;
+  border-radius: 8px;
+  color: #d1fae5;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* Leyenda */
+.legend {
+  display: flex;
+  gap: 16px;
+  margin: 16px 0;
+  font-size: 13px;
+  flex-wrap: wrap;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legend-color {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  border: 1px solid #374151;
+}
+
+.color-disponible { background: #22c55e; }
+.color-ocupada { background: #ef4444; }
+.color-reservada { background: #a855f7; }
+.color-mantenimiento { background: #6b7280; }
+.color-seleccionada { background: #3b82f6; }
+
+/* Grilla de estado */
+.grid-container {
+  border-radius: 8px;
+  overflow: auto;
+  border: 1px solid #374151;
+  background: #020617;
+  max-height: 500px;
+}
+
+table.estado-grid {
+  border-collapse: collapse;
+  min-width: 100%;
+  font-size: 13px;
+}
+
+.estado-grid th,
+.estado-grid td {
+  border: 1px solid #1f2937;
+  text-align: center;
+  padding: 4px;
+  white-space: nowrap;
+}
+
+.estado-grid thead {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: #020617;
+}
+
+.tipo-header {
+  font-weight: 600;
+  font-size: 11px;
+  background: #0f172a;
+  color: #e5e7eb;
+}
+
+.fecha-col,
+.fecha-header {
+  position: sticky;
+  left: 0;
+  background: #020617;
+  z-index: 3;
+  font-weight: 500;
+  font-size: 11px;
+  padding: 4px 8px;
+  min-width: 80px;
+}
+
+.fecha-col {
+  z-index: 1;
+  text-align: left;
+}
+
+/* Celdas de estado */
+.cell-estado {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.cell-estado:hover:not(.cell-mantenimiento):not(.cell-ocupada) {
+  opacity: 0.8;
+  transform: scale(1.1);
+}
+
+.cell-disponible { background: #22c55e; }
+.cell-ocupada { 
+  background: #ef4444; 
+  cursor: not-allowed;
+}
+.cell-reservada { background: #a855f7; }
+.cell-mantenimiento { 
+  background: #6b7280;
+  cursor: not-allowed;
+}
+.cell-seleccionada { 
+  background: #3b82f6 !important; 
+  border: 2px solid #fbbf24 !important;
+}
+
+.cell-preview {
+  opacity: 0.6;
+  box-shadow: inset 0 0 0 2px #fbbf24;
+}
+
+/* Búsqueda de huéspedes */
+.search-section {
+  margin-bottom: 24px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #374151;
+}
+
+.search-section h3 {
+  font-size: 16px;
+  margin-bottom: 12px;
+  color: #9ca3af;
+}
+
+.search-form {
+  background: #0f172a;
+  padding: 16px;
+  border-radius: 8px;
+}
+
+/* Resultados de búsqueda */
+.resultados-container {
+  margin-top: 16px;
+  max-height: 300px;
+  overflow-y: auto;
+  background: #0f172a;
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.resultado-item {
+  background: #1e293b;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.2s;
+}
+
+.resultado-item:hover {
+  background: #334155;
+}
+
+.resultado-info {
+  flex: 1;
+}
+
+.resultado-info p {
+  margin: 4px 0;
+  font-size: 13px;
+}
+
+.resultado-info strong {
+  color: #9ca3af;
+  margin-right: 8px;
+}
+
+.btn-seleccionar {
+  padding: 6px 16px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.btn-seleccionar:hover {
+  background: #1d4ed8;
+}
+
+.btn-seleccionar.acompanante {
+  background: #7c3aed;
+}
+
+.btn-seleccionar.acompanante:hover {
+  background: #6d28d9;
+}
+
+/* Huéspedes seleccionados */
+.seleccionados-section {
+  background: #0f172a;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.seleccionados-section h3 {
+  font-size: 16px;
+  margin-bottom: 12px;
+  color: #9ca3af;
+}
+
+.huesped-seleccionado {
+  padding: 12px;
+  background: #1e293b;
+  border-radius: 6px;
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+
+.huesped-seleccionado strong {
+  color: #60a5fa;
+}
+
+.acompanante-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background: #1e293b;
+  border-radius: 6px;
+  margin-bottom: 6px;
+  font-size: 13px;
+}
+
+.btn-quitar {
+  padding: 4px 12px;
+  background: #dc2626;
+  color: white;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.btn-quitar:hover {
+  background: #b91c1c;
+}
+
+.no-acompanantes {
+  color: #6b7280;
+  font-style: italic;
+  font-size: 13px;
+}
+
+/* Resumen de habitaciones */
+.habitaciones-resumen {
+  background: #0f172a;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.habitaciones-resumen h3 {
+  font-size: 16px;
+  margin-bottom: 12px;
+  color: #9ca3af;
+}
+
+.habitacion-item {
+  padding: 8px 12px;
+  background: #1e293b;
+  border-radius: 6px;
+  margin-bottom: 6px;
+  font-size: 13px;
+}
