@@ -468,3 +468,50 @@ table.estado-grid {
   font-size: 13px;
   color: #9ca3af;
 }
+
+/* Resultados de búsqueda de huéspedes */
+.resultados-container {
+  margin-top: 16px;
+  max-height: 300px;
+  overflow-y: auto;
+  background: #0f172a;
+  border-radius: 8px;
+  padding: 12px;
+  border: 1px solid #374151;
+}
+
+.resultado-item {
+  background: #1e293b;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.2s;
+  gap: 12px;
+}
+
+.resultado-item:last-child {
+  margin-bottom: 0;
+}
+
+.resultado-item:hover {
+  background: #334155;
+  transform: translateY(-1px);
+}
+
+.resultado-info {
+  flex: 1;
+}
+
+.resultado-info p {
+  margin: 4px 0;
+  font-size: 13px;
+  color: #e5e7eb;
+}
+
+.resultado-info strong {
+  color: #9ca3af;
+  margin-right: 8px;
+}

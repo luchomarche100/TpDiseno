@@ -15,11 +15,14 @@ const modalExito = document.getElementById("modalExito");
 const btnCerrarModal = document.getElementById("btnCerrarModal");
 
 // Elementos del buscador de huésped
+const nombreBuscar = document.getElementById("nombreBuscar");
+const apellidoBuscar = document.getElementById("apellidoBuscar");
 const tipoDocBuscar = document.getElementById("tipoDocBuscar");
 const nroDocBuscar = document.getElementById("nroDocBuscar");
 const btnBuscarHuesped = document.getElementById("btnBuscarHuesped");
 const errorBusqueda = document.getElementById("errorBusqueda");
 const successBusqueda = document.getElementById("successBusqueda");
+const resultadosBusqueda = document.getElementById("resultadosBusqueda");
 const apellidoHuesped = document.getElementById("apellidoHuesped");
 const nombreHuesped = document.getElementById("nombreHuesped");
 const telefonoHuesped = document.getElementById("telefonoHuesped");
@@ -724,21 +727,21 @@ function limpiarFormulario() {
   });
 }
 
-// Buscar huésped por documento
+// Buscar huésped por nombre, apellido y/o documento
 btnBuscarHuesped.addEventListener('click', async () => {
   errorBusqueda.textContent = '';
   successBusqueda.textContent = '';
+  resultadosBusqueda.style.display = 'none';
+  resultadosBusqueda.innerHTML = '';
   
+  const nombre = nombreBuscar.value.trim();
+  const apellido = apellidoBuscar.value.trim();
   const tipoDoc = tipoDocBuscar.value;
   const nroDoc = nroDocBuscar.value.trim();
   
-  if (!tipoDoc) {
-    errorBusqueda.textContent = 'Debe seleccionar el tipo de documento';
-    return;
-  }
-  
-  if (!nroDoc) {
-    errorBusqueda.textContent = 'Debe ingresar el número de documento';
+  // Validar que al menos un campo esté completo
+  if (!nombre && !apellido && !tipoDoc && !nroDoc) {
+    errorBusqueda.textContent = 'Debe completar al menos un campo de búsqueda';
     return;
   }
   
@@ -747,6 +750,8 @@ btnBuscarHuesped.addEventListener('click', async () => {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
+        nombre: nombre,
+        apellido: apellido,
         tipoDocumento: tipoDoc,
         nroDocumento: nroDoc
       })
@@ -760,24 +765,71 @@ btnBuscarHuesped.addEventListener('click', async () => {
     }
     
     if (data.huespedes && data.huespedes.length > 0) {
-      const huesped = data.huespedes[0];
-      apellidoHuesped.value = huesped.apellido || '';
-      nombreHuesped.value = huesped.nombres || '';
-      telefonoHuesped.value = huesped.telefono || '';
-      successBusqueda.textContent = '✓ Huésped encontrado';
-      
-      // Limpiar después de 3 segundos
-      setTimeout(() => {
-        successBusqueda.textContent = '';
-      }, 3000);
+      mostrarResultadosHuespedes(data.huespedes);
     } else {
-      errorBusqueda.textContent = 'No se encontró ningún huésped con ese documento';
+      errorBusqueda.textContent = 'No se encontraron huéspedes con los criterios ingresados';
     }
   } catch (error) {
     console.error('Error al buscar huésped:', error);
     errorBusqueda.textContent = 'Error de conexión al buscar huésped';
   }
 });
+
+function mostrarResultadosHuespedes(huespedes) {
+  resultadosBusqueda.innerHTML = '';
+  
+  if (!Array.isArray(huespedes) || huespedes.length === 0) {
+    resultadosBusqueda.innerHTML = "<p style='padding: 12px; color: #9ca3af;'>No se encontraron huéspedes.</p>";
+    resultadosBusqueda.style.display = 'block';
+    return;
+  }
+
+  successBusqueda.textContent = `✓ Se encontraron ${huespedes.length} huésped(es)`;
+
+  huespedes.forEach(h => {
+    const item = document.createElement('div');
+    item.classList.add('resultado-item');
+
+    item.innerHTML = `
+      <div class="resultado-info">
+        <p><strong>Nombre:</strong> ${h.nombres || ''}</p>
+        <p><strong>Apellido:</strong> ${h.apellido || ''}</p>
+        <p><strong>Tipo Doc:</strong> ${h.tipoDocumento || ''}</p>
+        <p><strong>Nro Doc:</strong> ${h.nroDocumento || ''}</p>
+        <p><strong>Teléfono:</strong> ${h.telefono || 'No especificado'}</p>
+      </div>
+    `;
+
+    const btnSeleccionar = document.createElement('button');
+    btnSeleccionar.textContent = 'Seleccionar';
+    btnSeleccionar.classList.add('btn', 'btn-primary');
+    btnSeleccionar.style.padding = '6px 12px';
+    btnSeleccionar.style.fontSize = '13px';
+    
+    btnSeleccionar.addEventListener('click', () => {
+      seleccionarHuesped(h);
+    });
+
+    item.appendChild(btnSeleccionar);
+    resultadosBusqueda.appendChild(item);
+  });
+  
+  resultadosBusqueda.style.display = 'block';
+}
+
+function seleccionarHuesped(huesped) {
+  apellidoHuesped.value = huesped.apellido || '';
+  nombreHuesped.value = huesped.nombres || '';
+  telefonoHuesped.value = huesped.telefono || '';
+  
+  // Ocultar resultados después de seleccionar
+  resultadosBusqueda.style.display = 'none';
+  successBusqueda.textContent = '✓ Huésped seleccionado';
+  
+  setTimeout(() => {
+    successBusqueda.textContent = '';
+  }, 3000);
+}
 
 btnBuscar.addEventListener("click", buscarEstadoHabitaciones);
 

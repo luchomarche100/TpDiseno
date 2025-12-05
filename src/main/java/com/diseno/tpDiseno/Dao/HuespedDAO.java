@@ -23,12 +23,11 @@ public interface HuespedDAO extends JpaRepository<Huesped, Long> {
     List<Huesped> findByTipoDocumentoAndNroDocumento(TipoDocumentoEnum tipoDocumento,
          String nroDocumento);
 
-         // Query personalizada con parámetros opcionales
  @Query(value = "SELECT h.* FROM huesped h WHERE " +
-           "(CAST(:nombre AS VARCHAR) IS NULL OR h.nombres LIKE CONCAT('%', CAST(:nombre AS VARCHAR), '%')) AND " +
-           "(CAST(:apellido AS VARCHAR) IS NULL OR h.apellido LIKE CONCAT('%', CAST(:apellido AS VARCHAR), '%')) AND " +
-           "(CAST(:tipoDocumento AS VARCHAR) IS NULL OR h.tipo_documento = CAST(:tipoDocumento AS VARCHAR)) AND " +
-           "(CAST(:nroDocumento AS VARCHAR) IS NULL OR h.nro_documento = CAST(:nroDocumento AS VARCHAR))",
+           "(:nombre IS NULL OR :nombre = '' OR LOWER(h.nombres) LIKE LOWER(CONCAT('%', :nombre, '%'))) AND " +
+           "(:apellido IS NULL OR :apellido = '' OR LOWER(h.apellido) LIKE LOWER(CONCAT('%', :apellido, '%'))) AND " +
+           "(:tipoDocumento IS NULL OR :tipoDocumento = '' OR h.tipo_documento = :tipoDocumento) AND " +
+           "(:nroDocumento IS NULL OR :nroDocumento = '' OR h.nro_documento = :nroDocumento)",
            nativeQuery = true)
     List<Huesped> buscarHuespedes(
             @Param("nombre") String nombre,
