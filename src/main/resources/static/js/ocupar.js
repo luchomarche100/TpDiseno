@@ -597,6 +597,12 @@ async function buscarHuespedes() {
     nroDocumento: buscarNumDoc.value.trim()
   };
 
+  // Validar que al menos un campo esté completo
+  if (!datos.nombre && !datos.apellido && !datos.tipoDocumento && !datos.nroDocumento) {
+    errorBusqueda.textContent = "Debe completar al menos un campo de búsqueda";
+    return;
+  }
+
   try {
     const response = await fetch("/api/huespedes/buscar", {
       method: "POST",

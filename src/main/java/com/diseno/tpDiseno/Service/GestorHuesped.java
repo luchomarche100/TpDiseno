@@ -111,6 +111,15 @@ public class GestorHuesped {
     public BuscarHuespedResponse buscarHuespedes(BuscarHuespedRequest request) {
     BuscarHuespedResponse response = new BuscarHuespedResponse();
 
+    String nombre = (request.getNombre() != null && !request.getNombre().trim().isEmpty()) 
+        ? request.getNombre().trim() : null;
+    
+    String apellido = (request.getApellido() != null && !request.getApellido().trim().isEmpty()) 
+        ? request.getApellido().trim() : null;
+    
+    String nroDocumento = (request.getNroDocumento() != null && !request.getNroDocumento().trim().isEmpty()) 
+        ? request.getNroDocumento().trim() : null;
+
     String tipoDocumentoStr = null;
     if (request.getTipoDocumento() != null && !request.getTipoDocumento().trim().isEmpty()) {
         try {
@@ -126,10 +135,10 @@ public class GestorHuesped {
     }
 
     List<Huesped> huespedes = huespedDAO.buscarHuespedes(
-        request.getNombre(), 
-        request.getApellido(), 
+        nombre, 
+        apellido, 
         tipoDocumentoStr,
-        request.getNroDocumento()
+        nroDocumento
     );
     
     if (huespedes.isEmpty()) {

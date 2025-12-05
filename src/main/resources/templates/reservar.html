@@ -79,6 +79,14 @@
             <div class="buscador-title">¿Huésped registrado?</div>
             <div class="buscador-row">
               <div class="field">
+                <label for="nombreBuscar">Nombre</label>
+                <input type="text" id="nombreBuscar" placeholder="Ej: Juan" />
+              </div>
+              <div class="field">
+                <label for="apellidoBuscar">Apellido</label>
+                <input type="text" id="apellidoBuscar" placeholder="Ej: Pérez" />
+              </div>
+              <div class="field">
                 <label for="tipoDocBuscar">Tipo Documento</label>
                 <select id="tipoDocBuscar">
                   <option value="">Seleccione...</option>
@@ -98,6 +106,11 @@
             </div>
             <div id="errorBusqueda" class="error-message"></div>
             <div id="successBusqueda" class="success-message"></div>
+            
+            <!-- Resultados de búsqueda -->
+            <div id="resultadosBusqueda" class="resultados-container" style="display: none;">
+              <!-- Los resultados se insertan dinámicamente -->
+            </div>
           </div>
 
           <div class="separador">O ingrese los datos manualmente:</div>
